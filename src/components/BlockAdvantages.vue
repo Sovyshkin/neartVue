@@ -1,53 +1,41 @@
 <script>
-import axios from "axios";
 export default {
   name: "BlockAdvantages",
   components: {},
   data() {
     return {};
   },
-  async mounted() {
-    try {
-      let response = await axios.get(`/users/${localStorage.getItem("id")}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      this.$i18n.locale = response.data.user.lang;
-    } catch (err) {
-      console.log(err);
-    }
-  },
+  async mounted() {},
 };
 </script>
 <template>
   <div class="wrapper">
-    <h2>{{ $t("usAdvantages") }}</h2>
+    <h2>Наши преимущества</h2>
     <div class="cards">
       <div class="card">
-        <img src="../assets/clock.svg" alt="" class="icon" />
-        <div class="title">{{ $t("uptime") }}</div>
-        <div class="desc">{{ $t("stableConnect") }}</div>
+        <img src="../assets/unique.png" alt="" class="icon" />
+        <div class="title">Уникальные картины</div>
+        <div class="desc">Оригинальные работы от талантливых художников.</div>
       </div>
       <div class="card">
-        <img src="../assets/24-support.svg" alt="" class="icon" />
-        <div class="title">{{ $t("support") }}</div>
-        <div class="desc">{{ $t("supportText") }}</div>
+        <img src="../assets/verify.png" alt="" class="icon" />
+        <div class="title">Безопасная покупка</div>
+        <div class="desc">Защищенные платежи. Гарантия сделки.</div>
       </div>
       <div class="card">
-        <img src="../assets/verify.svg" alt="" class="icon" />
-        <div class="title">{{ $t("garant") }}</div>
-        <div class="desc">{{ $t("garantText") }}</div>
+        <img src="../assets/delivery.png" alt="" class="icon" />
+        <div class="title">Доставка</div>
+        <div class="desc">Быстрая доставка по всему миру.</div>
       </div>
       <div class="card">
-        <img src="../assets/driver-refresh.svg" alt="" class="icon" />
-        <div class="title">{{ $t("fastConnect") }}</div>
-        <div class="desc">{{ $t("fastConnectText") }}</div>
+        <img src="../assets/support.png" alt="" class="icon" />
+        <div class="title">Консультация</div>
+        <div class="desc">Помощь эксперта в выборе искусства.</div>
       </div>
       <div class="card">
-        <img src="../assets/pcPhone.svg" alt="" class="icon" />
-        <div class="title">{{ $t("control") }}</div>
-        <div class="desc">{{ $t("controlText") }}</div>
+        <img src="../assets/choice.png" alt="" class="icon" />
+        <div class="title">Широкий выбор</div>
+        <div class="desc">Разнообразие стилей, жанров и размеров.</div>
       </div>
     </div>
   </div>
@@ -55,6 +43,7 @@ export default {
 <style scoped>
 h2 {
   text-align: center;
+  z-index: 2;
 }
 .wrapper {
   margin-top: 40px;
@@ -80,7 +69,7 @@ h2 {
 }
 
 .title {
-  color: #cf0032;
+  color: #aa6a2a;
   text-align: center;
   font-weight: 600;
   font-size: 18px;

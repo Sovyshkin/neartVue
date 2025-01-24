@@ -1,21 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-import AppVue from "../App.vue";
-import App404 from "../components/App_404.vue";
-import AppMarket from "../components/AppMarket.vue";
-import AppCart from "../components/AppCart.vue";
-import MyMiners from "../components/MyMiners.vue";
-import BlockFaq from "../components/BlockFaq.vue";
-import AppProfile from "../components/AppProfile.vue";
-import AppMain from "../components/AppMain.vue";
-import ControlReset from "../components/СontrolReset.vue";
-import MyPayments from "@/components/MyPayments.vue";
-import AppAccruals from "@/components/AppAccruals.vue";
-import AppDashboard from "@/components/AppDashboard.vue";
-import AppProduct from "../components/AppProduct.vue";
-import AppPayment from "../components/AppPayment.vue";
-import CreateTicket from "../components/CreateTicket.vue";
-import AppTicket from "../components/AppTicket.vue";
-import AppTickets from "../components/AppTickets.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -23,87 +6,87 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
-      component: AppVue,
+      component: () => import("../App.vue"),
     },
     {
       path: "/404",
       name: "404",
-      component: App404,
+      component: () => import("../components/App_404.vue"),
     },
     {
-      path: "/marketplace",
-      name: "marketplace",
-      component: AppMarket,
+      path: "/arts",
+      name: "arts",
+      component: () => import("../components/AppArts.vue"),
     },
     {
-      path: "/cart",
-      name: "cart",
-      component: AppCart,
-    },
-    {
-      path: "/myminers",
-      name: "myminers",
-      component: MyMiners,
+      path: "/arts/art",
+      name: "art",
+      component: () => import("../components/CardOpen.vue"),
     },
     {
       path: "/support",
       name: "support",
-      component: BlockFaq,
+      component: () => import("../components/BlockFaq.vue"),
     },
     {
       path: "/profile",
       name: "profile",
-      component: AppProfile,
-    },
-    {
-      path: "/main",
-      name: "main",
-      component: AppMain,
+      component: () => import("../components/AppProfile.vue"),
     },
     {
       path: "/reset_password",
       name: "controlreset",
-      component: ControlReset,
-    },
-    {
-      path: "/mypayments",
-      name: "mypayments",
-      component: MyPayments,
-    },
-    {
-      path: "/accruals",
-      name: "accruals",
-      component: AppAccruals,
-    },
-    {
-      path: "/dashboard",
-      name: "dashboard",
-      component: AppDashboard,
-    },
-    {
-      path: "/product",
-      name: "product",
-      component: AppProduct,
-    },
-    {
-      path: "/payment",
-      name: "payment",
-      component: AppPayment,
+      component: () => import("../components/СontrolReset.vue"),
     },
     {
       path: "/create_ticket",
       name: "createTicket",
-      component: CreateTicket,
+      component: () => import("../components/CreateTicket.vue"),
     },
     {
       path: "/ticket",
       name: "ticket",
-      component: AppTicket,
+      component: () => import("../components/AppTicket.vue"),
     },
     {
       path: "/tickets",
       name: "tickets",
-      component: AppTickets,
+      component: () => import("../components/AppTickets.vue"),
+    },
+    {
+      path: "/about-us",
+      name: "aboutUs",
+      component: () => import("../components/AboutUs.vue"),
+    },
+    {
+      path: "/cart",
+      name: "cart",
+      component: () => import("../components/AppCart.vue"),
+    },
+    {
+      path: "/favorite",
+      name: "favorite",
+      component: () => import("../components/AppFavorite.vue"),
+    },
+    {
+      path: "/admin",
+      name: "admin",
+      component: () => import("../components/AppAdmin.vue"),
+    },
+    {
+      path: "/admin/add/art",
+      name: "addart",
+      component: () => import("../components/CreateArt.vue"),
+    },
+    {
+      path: "/admin/add/artist",
+      name: "addartist",
+      component: () => import("../components/CreateArtist.vue"),
+    },
+    {
+      path: "/admin/edit/artist",
+      name: "editArtist",
+      component: () => import("../components/EditArtist.vue"),
     },
   ],
 });

@@ -1,0 +1,124 @@
+<script>
+import axios from "axios";
+export default {
+  name: "ProductCard",
+  components: {},
+  data() {
+    return {
+      items: [],
+      carouselRef: "",
+    };
+  },
+  props: {
+    id: String,
+    title: String,
+    price: String,
+    img_urls: Array,
+    description: String,
+    cart: Boolean,
+    favorite: Boolean,
+  },
+  methods: {
+    async deleteElem() {
+      try {
+        let response = await axios.post(`/delete_elem`, {
+          cart_id: localStorage.getItem("cart_id"),
+          picture_id: this.id,
+        });
+        console.log(response);
+        this.$emit("checkDel");
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async deleteFav() {
+      try {
+        let response = await axios.post(`/favorites/remove`, {
+          customer_id: localStorage.getItem("id"),
+          picture_id: this.id,
+        });
+        console.log(response);
+        this.$emit("checkDel");
+      } catch (err) {
+        console.log();
+      }
+    },
+  },
+  async mounted() {},
+};
+</script>
+<template>
+  <div class="card" @click="this.$router.push({ name: 'art', query: { id } })">
+    <v-carousel
+      height="250"
+      show-arrows="hover"
+      cycle
+      hide-delimiter-background
+      v-if="img_urls.length > 0"
+      class="carousel"
+    >
+      <v-carousel-item
+        v-for="img in img_urls"
+        :key="img"
+        :src="`http://45.12.238.27:5000/images/${img}`"
+        cover
+      ></v-carousel-item>
+    </v-carousel>
+    <div class="info">
+      <span>{{ title }}</span>
+      <div class="flex font-medium items-center justify-between mt-4">
+        <span class="font-bold">{{ price }} ₽</span>
+      </div>
+      <button class="btn mt-3" v-if="cart" @click.stop.prevent="deleteElem">
+        Убрать из корзины
+      </button>
+      <button class="btn mt-3" v-if="favorite" @click.stop.prevent="deleteFav">
+        Убрать из избранного
+      </button>
+    </div>
+  </div>
+</template>
+<style scoped>
+.card {
+  width: 20%;
+  min-width: 320px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px;
+  background-color: #f1dbb2;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.card:hover {
+  transform: none;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.carousel {
+  border-radius: 20px;
+}
+.btn {
+  width: 100%;
+  background-color: #aa6a2a;
+  border-radius: 10px;
+  padding: 12px 17px;
+  color: #fff;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 16px;
+}
+
+.v-btn {
+  background-color: black;
+}
+</style>

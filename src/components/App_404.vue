@@ -37,7 +37,6 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: url("../assets/bg.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -47,7 +46,7 @@ export default {
 .err {
   font-size: 128px;
   font-weight: 700;
-  color: #cf0032;
+  color: #aa6a2a;
   line-height: 153.8px;
   opacity: 50%;
 }
@@ -61,7 +60,7 @@ export default {
 }
 
 .btn {
-  background-color: #cf0032;
+  background-color: #aa6a2a;
   color: #fff;
   border-radius: 10px;
   padding: 17px 24px;

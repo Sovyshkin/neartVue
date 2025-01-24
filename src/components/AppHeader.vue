@@ -1,288 +1,138 @@
 <script>
-import axios from "axios";
+import AppLogin from "./AppLogin.vue";
+import AppRegister from "./AppRegister.vue";
 export default {
   name: "AppHeader",
-  components: {},
+  components: { AppLogin, AppRegister },
   data() {
     return {
-      lang: "RU",
-      names: {
-        marketplace: this.$t("market"),
-        main: this.$t("main"),
-        dashboard: this.$t("dash"),
-        myminers: this.$t("myMiners"),
-        mypayments: this.$t("myPayments"),
-        accruals: this.$t("accruals"),
-        cart: this.$t("cart"),
-        support: this.$t("centerHelp"),
-        profile: this.$t("profile"),
-        payment: this.$t("payment"),
-        tickets: this.$t("myTickets"),
-        ticket: this.$t("ticket"),
-      },
-      id: null,
-      avatar: "",
-      countries: ["RU", "EN", "HE"],
-      active: false,
-      active_billings: false,
+      showLogin: false,
+      showRegister: false,
+      id: "",
+      menu: false,
     };
   },
-  props: {
-    login: Boolean,
-  },
   methods: {
+    load_info() {
+      this.id = localStorage.getItem("id");
+    },
     scrollToBottom(name) {
       const element = document.getElementById(name);
       if (element) {
         window.scrollTo({ top: element.offsetTop, behavior: "smooth" });
       } else {
-        this.$router.push({ name: "main" });
+        this.$router.push({ name: "home" });
       }
     },
-
-    async verify_token() {
+    goRoute(name) {
       try {
-        let response = await axios.post(
-          `/auth/validate`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-        let message = response.data.message;
-        console.log(response);
-        if (message != "ok") {
-          this.$router.push({ name: "home" });
-        }
-      } catch (err) {
-        console.log(err);
-        let token = this.$route.query.token;
-        if (!token) {
-          localStorage.clear();
-          this.$router.push({ name: "home" });
-        }
-      }
-    },
-
-    async load_avatar() {
-      try {
-        let response = await axios.get(`/users/${localStorage.getItem("id")}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-        console.log("HEADER", response);
-        this.lang = response.data.user.lang;
-        this.$i18n.locale = this.lang;
-        let app = document.querySelector(`.wrap`);
-        if (this.lang == "HE") {
-          app.style.direction = "rtl";
-        } else {
-          app.style.direction = "ltr";
-        }
-        this.active_billings = response.data.user.active_billings;
-        this.avatar = response.data.user.image.url;
+        this.$router.push({ name: name });
       } catch (err) {
         console.log(err);
       }
     },
-
-    loadLang() {
-      try {
-        this.lang = localStorage.getItem("lang");
-        console.log(localStorage.getItem("lang"));
-        if (this.lang) {
-          this.$i18n.locale = this.lang;
-        } else {
-          this.lang = "RU";
-        }
-        let app = document.querySelector(`.wrap`);
-        if (this.lang == "HE") {
-          app.style.direction = "rtl";
-        } else {
-          app.style.direction = "ltr";
-        }
-      } catch (err) {
-        console.log(err);
+    openDialog(type) {
+      if (type == "login") {
+        this.showLogin = true;
+      } else {
+        this.showRegister = true;
       }
     },
-
-    async changeLang(lang) {
-      try {
-        this.lang = lang;
-        if (this.id != null) {
-          let response = await axios.post(
-            `/users/update/lang`,
-            {
-              lang: lang,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
-            }
-          );
-          console.log(response);
-          if (response.data.status == "ok") {
-            this.$i18n.locale = lang;
-            localStorage.setItem("lang", this.lang);
-            location.reload();
-          }
-        } else {
-          localStorage.setItem("lang", this.lang);
-          this.$i18n.locale = this.lang;
-          let app = document.querySelector(`.wrap`);
-          if (this.lang == "HE") {
-            app.style.direction = "rtl";
-          } else {
-            app.style.direction = "ltr";
-          }
-        }
-      } catch (err) {
-        console.log(err);
-      }
+    handleLog() {
+      this.showLogin = false;
+      setTimeout(() => {
+        this.showRegister = true;
+      }, 300);
     },
   },
   mounted() {
-    this.verify_token();
-    this.id = localStorage.getItem("id") || null;
-
-    window.addEventListener("storage", () => {
-      this.id = localStorage.getItem("id") || null;
-    });
-    if (this.id != null) {
-      console.log("я тут");
-      this.load_avatar();
-    } else {
-      console.log("Я ТУТ");
-      this.loadLang();
-    }
+    this.load_info();
   },
 };
 </script>
 <template>
-  <div class="wrapper" v-if="$route.path == '/'">
-    <img
-      @click="this.$router.push({ name: 'main' })"
-      class="logo"
-      src="../assets/logo.png"
-      alt=""
-    />
-    <nav class="group-nav">
-      <li @click="scrollToBottom('services')" class="item-nav">
-        {{ $t("services") }}
-      </li>
-      <li @click="scrollToBottom('equipment')" class="item-nav">
-        {{ $t("equipment") }}
-      </li>
-      <li @click="scrollToBottom('advantages')" class="item-nav">
-        {{ $t("advantages") }}
-      </li>
-      <li @click="scrollToBottom('business')" class="item-nav">
-        {{ $t("business") }}
-      </li>
-      <li @click="scrollToBottom('faq')" class="item-nav">
-        {{ $t("information") }}
-      </li>
-      <li @click="scrollToBottom('test')" class="item-nav">{{ $t("test") }}</li>
+  <div class="wrapper">
+    <div class="logo" @click="this.$router.push({ name: 'home' })">
+      <img class="mainLogo" src="../assets/logo.png" alt="" />
+      <img class="logoText" src="../assets/logoText.png" alt="" />
+    </div>
+    <nav class="group-nav adap">
+      <li class="item-nav" @click="goRoute('home')">Главная</li>
+      <li @click="goRoute('arts')" class="item-nav">Картины</li>
+      <li class="item-nav" @click="goRoute('aboutUs')">О нас</li>
     </nav>
-    <div class="contacts">
-      <a href="https://wa.me/+972508981614" target="_blank"
-        ><img src="../assets/WhatsApp.svg" alt="WhatAapp"
-      /></a>
-      <a href="https://t.me/Totalminers" target="_blank"
-        ><img src="../assets/Telegram.svg" alt="Telegram"
-      /></a>
-      <a class="number" href="tel: 972 50-8981614">+972 50-8981614</a>
-    </div>
-    <div class="info" v-if="!id">
-      <div class="lan" @click="active = !active">
-        <img class="flag" :src="'../assets/' + lang + '.png'" alt="" />
-        <span>{{ lang }}</span>
-        <img class="arrow" src="../assets/arrow-down.png" alt="" />
-        <div class="all_flags" v-if="active">
-          <div
-            class="group-country"
-            @click="changeLang(item)"
-            v-for="item in countries"
-            :key="item"
-          >
-            <img class="flag" :src="'../assets/' + item + '.png'" alt="" />
-            <span class="group-value">{{ item }}</span>
-          </div>
-        </div>
-      </div>
-      <button @click="this.$emit('updateLogin', true)" class="btn login">
-        {{ $t("login") }}
+    <v-dialog max-width="500" v-if="!id" v-model="showLogin">
+      <AppLogin @close="showLogin = false" @goReg="handleLog" />
+    </v-dialog>
+    <v-dialog max-width="500" v-if="!id" v-model="showRegister">
+      <AppRegister @close="showRegister = false" />
+    </v-dialog>
+    <div class="group">
+      <button class="btn login adap" v-if="!id" @click="openDialog('login')">
+        Авторизация
       </button>
-    </div>
-    <div class="info" v-else>
-      <div class="lan" @click="active = !active">
-        <img class="flag" :src="'../assets/' + lang + '.png'" alt="" />
-        <span>{{ lang }}</span>
-        <img class="arrow" src="../assets/arrow-down.png" alt="" />
-        <div class="all_flags" v-if="active">
-          <div
-            class="group-country"
-            @click="changeLang(item)"
-            v-for="item in countries"
-            :key="item"
-          >
-            <img class="flag" :src="'../assets/' + item + '.png'" alt="" />
-            <span class="group-value">{{ item }}</span>
-          </div>
-        </div>
-      </div>
-      <div class="avatar" @click="this.$router.push({ name: 'profile' })">
+      <img
+        v-if="id"
+        @click="goRoute('cart')"
+        class="cart"
+        src="../assets/cart.png"
+        alt=""
+      />
+      <img
+        v-if="id"
+        @click="goRoute('favorite')"
+        class="favorite"
+        src="../assets/favorite.png"
+        alt=""
+      />
+      <div
+        class="avatar adap"
+        v-if="id"
+        @click="this.$router.push({ name: 'profile' })"
+      >
         <img v-if="avatar" :src="avatar" alt="" />
         <img v-else src="../assets/profile.png" alt="" />
       </div>
-    </div>
-  </div>
-  <div class="wrapper" v-else>
-    <img
-      @click="this.$router.push({ name: 'main' })"
-      class="logo logoAdap"
-      src="../assets/logo.png"
-      alt=""
-    />
-    <span class="main mainAdap"
-      ><span>{{ $t("main") }}</span
-      ><span>/</span> {{ this.names[this.$route.name] }}</span
-    >
-    <div class="info">
-      <div class="lan" @click="active = !active">
-        <img class="flag" :src="'../assets/' + lang + '.png'" alt="" />
-        <span>{{ lang }}</span>
-        <img class="arrow" src="../assets/arrow-down.png" alt="" />
-        <div class="all_flags" v-if="active">
-          <div
-            class="group-country"
-            @click="changeLang(item)"
-            v-for="item in countries"
-            :key="item"
-          >
-            <img class="flag" :src="'../assets/' + item + '.png'" alt="" />
-            <span class="group-value">{{ item }}</span>
+      <div class="menu">
+        <img
+          @click="menu = !menu"
+          class="menu-closed"
+          src="../assets/menu.png"
+          alt=""
+        />
+        <transition name="fade">
+          <div class="menu-opened" v-if="menu">
+            <div class="item" @click="goRoute('profile')" v-if="id">
+              <img src="../assets/profile.png" alt="" />
+              <span>Профиль</span>
+            </div>
+            <div class="item" @click="goRoute('home')">
+              <img src="../assets/main.png" alt="" />
+              <span>Главная</span>
+            </div>
+            <div class="item" @click="goRoute('arts')">
+              <img src="../assets/arts.png" alt="" />
+              <span>Картины</span>
+            </div>
+            <div class="item" @click="goRoute('aboutUs')">
+              <img src="../assets/aboutUs.png" alt="" />
+              <span>О нас</span>
+            </div>
+            <div class="item" @click="goRoute('cart')">
+              <img src="../assets/cart.png" alt="" />
+              <span>Корзина</span>
+            </div>
+            <div class="item" @click="goRoute('favorite')">
+              <img src="../assets/favorite.png" alt="" />
+              <span>Избранное</span>
+            </div>
+            <button class="btn login" v-if="!id" @click="openDialog('login')">
+              Авторизация
+            </button>
           </div>
-        </div>
-      </div>
-      <div class="avatar" @click="this.$router.push({ name: 'profile' })">
-        <img v-if="avatar" :src="avatar" alt="" />
-        <img v-else src="../assets/profile.png" alt="" />
+        </transition>
       </div>
     </div>
-  </div>
-  <div class="active-billings" v-if="active_billings">
-    <span>{{ $t("warning") }}</span>
-    <button
-      class="btn goPay"
-      @click="this.$router.push({ name: 'mypayments' })"
-    >
-      {{ $t("goPay") }}
-    </button>
   </div>
 </template>
 <style scoped>
@@ -301,7 +151,7 @@ export default {
 .active-billings {
   width: 100%;
   padding: 5px 10px;
-  background-color: #cf0032;
+  background-color: #aa6a2a;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -312,25 +162,28 @@ export default {
 }
 
 .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   height: 60px;
   cursor: pointer;
 }
 
-.flag {
-  height: 14px;
+.mainLogo {
+  width: 70px;
 }
 
-.contacts img {
-  height: 28px;
-  width: 28px;
-  cursor: pointer;
+.logoText {
+  width: 180px;
+  padding-top: 10px;
 }
 
 .group-nav {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 20px;
   list-style: none;
+  transform: translateX(-60px);
 }
 
 .item-nav {
@@ -346,36 +199,14 @@ export default {
   gap: 15px;
 }
 
-.lan {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  position: relative;
-  cursor: pointer;
-}
-
-.all_flags {
-  position: absolute;
-  padding: 3px 7px;
-  transform: translateY(70px);
-  border-radius: 5px;
-  background-color: #fff;
-  box-shadow: 0 0 10px 0 #00000037;
-  z-index: 3;
-  min-width: 57px;
-}
-
-.group-country {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
 .login {
-  background-color: #cf0032;
+  background-color: #aa6a2a;
   padding: 14px 24px;
   border-radius: 5px;
   color: #fff;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 16px;
 }
 
 .arrow {
@@ -385,7 +216,7 @@ export default {
 
 .item-nav::after {
   margin-top: 2px;
-  background-color: #cf0032; /* Цвет линии при наведении на нее курсора мыши */
+  background-color: #aa6a2a; /* Цвет линии при наведении на нее курсора мыши */
   display: block;
   content: "";
   height: 2px; /* Высота линии */
@@ -425,76 +256,135 @@ export default {
   object-fit: cover;
 }
 
-.info {
+.group {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 15px;
 }
 
-.logoAdap {
+.cart,
+.favorite {
+  height: 30px;
+  cursor: pointer;
+  transition: all 500ms ease;
+}
+
+.cart:hover,
+.favorite:hover .avatar img:hover {
+  transform: translateY(-3px);
+}
+
+.menu {
   display: none;
+  position: relative;
+}
+.menu-closed {
+  height: 35px;
+  width: 35px;
+  cursor: pointer;
 }
 
-.goPay {
-  color: #fff;
-  border: 1px solid #fff;
+.menu-opened {
+  position: absolute;
+  width: 142px;
+  z-index: 4;
+  top: 40px;
+  left: -110px;
+  padding: 10px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  background-color: #f2f2f2;
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }
 
-.number {
-  direction: ltr !important;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 18px;
+  letter-spacing: -0.1px;
+  cursor: pointer;
+  padding: 3px;
+}
+
+.item img {
+  width: 20px;
+  height: 20px;
 }
 
 @media (max-width: 1000px) {
-  .group-nav {
-    display: none;
-  }
-
   .login {
     padding: 7px 12px;
   }
+
+  .group-nav {
+    transform: none;
+  }
 }
 
-@media (max-width: 768px) {
-  .logoAdap {
-    display: block;
+@media (max-width: 780px) {
+  .avatar img {
+    height: 34px;
+    width: 34px;
+    object-fit: cover;
   }
-  .mainAdap {
-    display: none;
+
+  .cart,
+  .favorite {
+    height: 28px;
+    width: 28px;
+  }
+
+  .group {
+    gap: 6px;
+  }
+
+  .mainLogo {
+    width: 50px;
+  }
+
+  .logoText {
+    width: 130px;
+  }
+
+  .group-nav {
+    gap: 12px;
   }
 }
 
 @media (max-width: 650px) {
-  .number {
-    font-size: small;
-  }
-
   .wrapper {
     gap: 10px;
     padding: 0 15px;
   }
-}
 
-@media (max-width: 576px) {
-  .contacts {
+  .adap {
     display: none;
+  }
+
+  .group {
+    gap: 10px;
+  }
+  .menu {
+    display: flex;
   }
 }
 
 @media (max-width: 472px) {
-  .contacts {
-    width: fit-content;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-  }
-
   .wrapper {
     padding: 0 7px !important;
-  }
-
-  .logo {
-    height: 45px;
   }
 }
 
@@ -504,18 +394,9 @@ export default {
     width: 32px;
   }
 
-  .contacts img {
-    height: 18px;
-    width: 18px;
-  }
-
   .arrow {
     height: 12px;
     width: 12px;
-  }
-
-  .lan span {
-    font-size: 14px;
   }
 }
 </style>

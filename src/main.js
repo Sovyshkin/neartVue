@@ -4,8 +4,18 @@ import App from "./App.vue";
 import i18n from "./i18n";
 import router from "./router/router";
 import axios from "axios";
-import SlideVerify from "vue-monoplasty-slide-verify";
+// import { Carousel } from "vue-carousel";
 
-axios.defaults.baseURL = "http://45.147.177.78:9000/api";
+axios.defaults.baseURL = "http://45.12.238.27:5000/";
 
-createApp(App).use(SlideVerify).use(i18n).use(router).mount("#app");
+import "vuetify/styles";
+import { createVuetify } from "vuetify";
+import * as components from "vuetify/components";
+import * as directives from "vuetify/directives";
+
+const vuetify = createVuetify({
+  components,
+  directives,
+});
+
+createApp(App).use(router).use(vuetify).use(i18n).mount("#app");

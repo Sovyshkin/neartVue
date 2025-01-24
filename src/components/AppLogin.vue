@@ -8,16 +8,20 @@ export default {
     return {
       email: "",
       emailFill: false,
-      password: "",
-      passFill: false,
       auth: false,
       code: "",
       codeFill: false,
       message: "",
+      status: "",
       isLoading: false,
+      id: "",
     };
   },
+  props: ["visible"],
   methods: {
+    close() {
+      this.$emit("close", false);
+    },
     cancel() {
       document.body.style.overflow = "auto";
       this.$emit("updateLogin", false);
@@ -25,36 +29,27 @@ export default {
 
     async login() {
       try {
-        if (this.email && this.password) {
+        if (this.email) {
           this.isLoading = true;
-          this.emailFill = false;
-          this.passFill = false;
-          let response = await axios.post(`/auth/login`, {
+          let response = await axios.post(`/login`, {
             email: this.email,
-            password: this.password,
           });
-          let msg = response.data.status;
-          if (msg == "ok") {
+          console.log(response);
+          this.message = response.data.message;
+          this.status = response.status;
+          if (this.message == "Код отправлен") {
             this.auth = true;
-          } else {
-            this.message = this.$t(`${response.data.description}`);
+            setTimeout(() => {
+              this.message = "";
+            }, 2500);
           }
           setTimeout(() => {
             this.message = "";
           }, 2500);
-        } else {
-          if (!this.email) {
-            this.emailFill = true;
-          }
-          if (!this.password) {
-            this.passFill = true;
-          }
         }
-      } catch (res) {
-        console.log(res);
-        this.message = "Error";
-        this.emailFill = true;
-        this.passFill = true;
+      } catch (err) {
+        console.log(err);
+        this.message = "Такого пользователя не существует";
         setTimeout(() => {
           this.message = "";
         }, 2500);
@@ -65,41 +60,30 @@ export default {
 
     async verify() {
       try {
+        console.log(this.email);
         if (this.code) {
-          this.isLoading = true;
-          this.codeFill = false;
-          let response = await axios.post(`/auth/verify_totp`, {
+          let response = await axios.post(`/code_input`, {
+            code: this.code,
             email: this.email,
-            otp: this.code,
           });
-          let status = response.status;
-
-          if (status == 200) {
-            let id = response.data.id;
-            let token = response.data.token;
-            localStorage.setItem("id", id);
-            localStorage.setItem("token", token);
-            this.message = this.$t("success");
+          this.message = response.data.message;
+          this.id = response.data.id;
+          this.cart_id = response.data.cart_id;
+          if (this.id) {
+            localStorage.setItem("id", this.id);
+            localStorage.setItem("cart_id", this.cart_id);
             setTimeout(() => {
               this.message = "";
-              this.$emit("sliderVerify", false);
-            }, 3000);
-          } else {
-            console.log(response);
+              location.reload();
+              this.$emit("close", true);
+            }, 2500);
           }
-        } else {
-          this.codeFill = true;
+          setTimeout(() => {
+            this.message = "";
+          }, 2500);
         }
-      } catch (res) {
-        let response = res.response.data.detail;
-        console.log(response);
-        this.message = "Неверный код";
-        this.codeFill = true;
-        setTimeout(() => {
-          this.message = "";
-        }, 2500);
-      } finally {
-        this.isLoading = false;
+      } catch (err) {
+        console.log(err);
       }
     },
   },
@@ -110,123 +94,80 @@ export default {
 };
 </script>
 <template>
-  <div class="wrapper">
-    <LoadingSpinner v-if="isLoading" />
-    <div class="card" v-if="!auth">
-      <div class="cancel">
-        <span class="title">{{ $t("login") }}</span>
-        <img @click="cancel" src="../assets/close.png" alt="" />
-      </div>
-      <div class="group">
-        <input
-          type="email"
-          name="email"
-          id="email"
-          v-model="email"
-          :placeholder="$t('enterEmail')"
-          :class="{
-            nofillBorder: emailFill,
-          }"
-        />
-        <span
-          class="group-value"
-          :class="{
-            nofillText: emailFill,
-          }"
-          >Email</span
-        >
-      </div>
-      <div class="group">
-        <input
-          type="password"
-          name="pass"
-          v-model="password"
-          :placeholder="$t('enterPass')"
-          :class="{
-            nofillBorder: passFill,
-          }"
-        />
-        <span
-          class="group-value"
-          :class="{
-            nofillText: passFill,
-          }"
-          >{{ $t("pass") }}</span
-        >
-      </div>
-      <div class="forget_pass">
-        <a @click="this.$emit('updateReset', true)" href="#">{{
-          $t("forgotPass")
-        }}</a>
-      </div>
-      <button v-if="!message" @click="login" class="btn">
-        {{ $t("login") }}
-      </button>
-      <div
-        class="msg"
-        :class="{
-          success:
-            this.message == 'Успешно' ||
-            this.message == 'Success' ||
-            this.message == 'בהצלחה',
-          error:
-            this.message != 'Успешно' &&
-            this.message != 'Success' &&
-            this.message != 'בהצלחה',
-        }"
-        v-if="message"
-      >
-        {{ message }}
-      </div>
-      <div class="log">
-        <span>{{ $t("notRegister") }}</span>
-        <a @click="this.$emit('updateRegister', true)" href="#">{{
-          $t("register")
-        }}</a>
-      </div>
+  <LoadingSpinner v-if="isLoading" />
+  <div class="card" v-if="!auth">
+    <div class="cancel">
+      <span class="title">{{ $t("login") }}</span>
+      <img @click="close" src="../assets/close.png" alt="" />
     </div>
-    <div class="card" v-else>
-      <div class="cancel">
-        <span class="title">{{ $t("confirmation") }}</span>
-        <img @click="cancel" src="../assets/close.png" alt="" />
-      </div>
-      <div class="group">
-        <input
-          type="text"
-          name="code"
-          v-model="code"
-          :placeholder="$t('enterCode')"
-          :class="{
-            nofillBorder: codeFill,
-          }"
-        />
-        <span
-          class="group-value"
-          :class="{
-            nofillText: codeFill,
-          }"
-          >{{ $t("emailCode") }} email</span
-        >
-      </div>
-      <button @click="verify" v-if="!message" class="btn">
-        {{ $t("login") }}
-      </button>
-      <div
-        class="msg"
+    <div class="group">
+      <input
+        type="email"
+        name="email"
+        id="email"
+        v-model="email"
+        placeholder="Введите свою почту"
         :class="{
-          success:
-            this.message == 'Успешно' ||
-            this.message == 'Success' ||
-            this.message == 'בהצלחה',
-          error:
-            this.message != 'Успешно' &&
-            this.message != 'Success' &&
-            this.message != 'בהצלחה',
+          nofillBorder: emailFill,
         }"
-        v-if="message"
+      />
+      <span
+        class="group-value"
+        :class="{
+          nofillText: emailFill,
+        }"
+        >Email</span
       >
-        {{ message }}
-      </div>
+    </div>
+    <button v-if="!message" @click="login" class="btn">Авторизация</button>
+    <div
+      class="msg"
+      :class="{
+        success: this.message == 'Успешно',
+        error: this.message != 'Успешно',
+      }"
+      v-if="message"
+    >
+      {{ message }}
+    </div>
+    <div class="log">
+      <span>Ещё не зарегистрировались?</span>
+      <a @click="this.$emit('goReg', true)" href="#">Зарегистрироваться</a>
+    </div>
+  </div>
+  <div class="card" v-else>
+    <div class="cancel">
+      <span class="title">Подтверждение</span>
+      <img @click="close" src="../assets/close.png" alt="" />
+    </div>
+    <div class="group">
+      <input
+        type="text"
+        name="code"
+        v-model="code"
+        placeholder="Введите код"
+        :class="{
+          nofillBorder: codeFill,
+        }"
+      />
+      <span
+        class="group-value"
+        :class="{
+          nofillText: codeFill,
+        }"
+        >Код из письма email</span
+      >
+    </div>
+    <button @click="verify" v-if="!message" class="btn">Авторизация</button>
+    <div
+      class="msg"
+      :class="{
+        success: this.status == '200',
+        error: this.status != '200',
+      }"
+      v-if="message"
+    >
+      {{ message }}
     </div>
   </div>
 </template>
@@ -270,7 +211,7 @@ export default {
 
 .btn {
   width: 100%;
-  background-color: #cf0032;
+  background-color: #aa6a2a;
   border-radius: 10px;
   padding: 17px 24px;
   color: #fff;
@@ -295,7 +236,7 @@ a {
 }
 
 a {
-  color: #cf0032;
+  color: #aa6a2a;
 }
 
 .cancel {
@@ -351,10 +292,10 @@ input::placeholder {
 }
 
 .nofillBorder {
-  border: 1px solid #cf0032;
+  border: 1px solid #aa6a2a;
 }
 
 .nofillText {
-  color: #cf0032;
+  color: #aa6a2a;
 }
 </style>

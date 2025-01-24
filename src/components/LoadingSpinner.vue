@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <orbit-spinner :animation-duration="1200" :size="55" color="#CF0032" />
+    <orbit-spinner :animation-duration="1200" :size="55" color="#aa6a2a" />
   </div>
 </template>
 

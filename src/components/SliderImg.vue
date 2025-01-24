@@ -453,7 +453,7 @@ export default {
   top: 0px;
   left: 0px;
   cursor: move;
-  background-color: #cf0032 !important;
+  background-color: #aa6a2a !important;
 }
 
 .drag_verify .dv_handler i {

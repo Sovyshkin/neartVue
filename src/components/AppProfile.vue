@@ -1,44 +1,19 @@
 <script>
 import axios from "axios";
-import Qrcode from "qrcode.vue";
 import LoadingSpinner from "./LoadingSpinner.vue";
 
 export default {
   name: "AppProfile",
-  components: { Qrcode, LoadingSpinner },
+  components: { LoadingSpinner },
   data() {
     return {
-      active: 2,
-      profiletype: "",
-      image: "",
-      firstname: "",
-      lastname: "",
+      active: 1,
+      id: "",
       email: "",
-      phone: "",
-      country: "",
-      address: "",
-      inn: "",
-      telegram: "",
-      old_password: "",
-      new_password: "",
-      new_password2: "",
-      code_2fa: "",
-      wallet: "",
-      walletNew: "",
-      otp: "",
-      countries: [],
+      admin: "",
       status: "",
       message: "",
-      message2: "",
-      message3: "",
-      message4: "",
-      message5: "",
-      messageWallet: "",
-      mfa_url: "",
-      confirm2fa: false,
-      mfa: false,
       isLoading: false,
-      otp2: "",
     };
   },
   computed: {
@@ -62,30 +37,17 @@ export default {
     async load_info() {
       try {
         this.isLoading = true;
-        let res = await axios.get(`/users/countries`);
-        this.countries = res.data;
-        let response = await axios.get(`/users/${localStorage.getItem("id")}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-        console.log(response);
-        this.email = response.data.user.email;
-        this.phone = response.data.user.phone;
-        this.firstname = response.data.user.firstname;
-        this.lastname = response.data.user.lastname;
-        this.country = response.data.user.country;
-        this.profiletype = response.data.user.profileType;
-        this.inn = response.data.user.inn;
-        this.address = response.data.user.address;
-        this.telegram = response.data.user.telegram;
-        this.wallet = response.data.user.wallet;
-        this.mfa = response.data.user.mfa_enabled;
-        if (response.data.user.image) {
-          this.image = response.data.user.image.url;
+        this.id = localStorage.getItem("id");
+        if (this.id) {
+          let response = await axios.post(`/get_user/${this.id}`);
+          console.log(response);
+          this.email = response.data.email;
+          this.admin = response.data.is_admin;
         }
       } catch (err) {
         console.log(err);
+        localStorage.clear();
+        location.reload();
       } finally {
         this.isLoading = false;
       }
@@ -129,186 +91,30 @@ export default {
       }
     },
 
-    async updatePassword() {
-      try {
-        if (this.new_password == this.new_password2) {
-          let response = await axios.post(
-            `/users/update/password`,
-            {
-              old_password: this.old_password,
-              new_password: this.new_password,
-              otp: this.otp,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
-            }
-          );
-          this.message2 = response.data.status;
-          if (this.message2 == "ok") {
-            this.message2 = this.$t("success");
-          }
-        } else {
-          this.message2 = "Пароли не совпадают!";
-        }
-      } catch (err) {
-        console.log(err);
-        this.message2 = err.data.description;
-      }
-    },
-
-    async getmfa() {
-      try {
-        if (this.password) {
-          let response = await axios.get(
-            `/auth/getmfa?password=${this.password}`,
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
-            }
-          );
-          this.mfa_url = response.data.mfa_url;
-        } else {
-          this.message5 = "Введите пароль";
-          setTimeout(() => {
-            this.message5 = "";
-          }, 3000);
-        }
-      } catch (err) {
-        console.log(err);
-        this.message5 = "Пароль неверный";
-        setTimeout(() => {
-          this.message5 = "";
-        }, 3000);
-      }
-    },
-
-    async enablemfa() {
-      try {
-        if (this.code_2fa) {
-          let response = await axios.post(
-            `/auth/enablemfa?otp=${this.code_2fa}`,
-            {},
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
-            }
-          );
-          this.message3 = response.data.message;
-          if (this.message3 == "ok") {
-            this.message3 = this.$t("success");
-            this.load_info();
-          }
-        }
-      } catch (err) {
-        console.log(err);
-        this.message3 = "Неверный код";
-        setTimeout(() => {
-          this.message3 = "";
-        }, 3000);
-      }
-    },
-
-    authComfirm() {
-      this.confirm2fa = true;
-      this.mfa_url = "";
-    },
-
-    async setWallet() {
-      try {
-        let response = await axios.post(
-          `/users/setWallet`,
-          {
-            wallet: this.walletNew,
-            otp: this.otp,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-        this.message4 = response.data.status;
-        if (this.message4 == "ok") {
-          this.message4 = this.$t("success");
-          setTimeout(() => {
-            this.message4 = "";
-            this.otp = "";
-            this.load_info();
-          }, 3000);
-        }
-        setTimeout(() => {
-          this.message4 = "";
-          this.otp = "";
-          this.walletNew = "";
-        }, 3000);
-      } catch (err) {
-        console.log(err);
-        this.message4 = this.$t("success");
-        setTimeout(() => {
-          this.message4 = "";
-          this.otp = "";
-        }, 3000);
-      }
-    },
-
     exit() {
       localStorage.clear();
-      this.checkToken();
+      location.reload();
     },
-
-    checkToken() {
-      let token = localStorage.getItem("token");
-      if (!token) {
-        this.$router.push({ name: "home" });
-      }
-    },
-
     goChange(b) {
       this.$emit("updateAvatar", b);
     },
 
-    async deleteWallet() {
-      try {
-        if (this.otp2) {
-          let response = await axios.post(
-            `/users/wallet/delete`,
-            {
-              otp: this.otp2,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
-            }
-          );
-          console.log(response);
-          if (response.status == "200") {
-            this.messageWallet = this.$t("success");
-            setTimeout(() => {
-              this.messageWallet = "";
-              this.load_info();
-            }, 2500);
-          }
-        } else {
-          this.messageWallet = this.$t("enterCode");
-          setTimeout(() => {
-            this.messageWallet = "";
-          }, 2500);
-        }
-      } catch (err) {
-        console.log(err);
-        this.messageWallet = err.data.description;
+    check() {
+      this.id = localStorage.getItem("id");
+      if (!this.id) {
+        this.$router.push({ name: "home" });
+      } else {
+        this.load_info();
       }
+    },
+
+    goAdmin() {
+      this.$router.push({ name: "admin", query: { name: "arts" } });
     },
   },
   mounted() {
     document.body.style.overflow = "auto";
-    this.load_info();
-    this.checkToken();
+    this.check();
   },
 };
 </script>
@@ -322,22 +128,9 @@ export default {
         class="btn"
         :class="{ active: this.active == 1 }"
       >
-        {{ $t("personalInfo") }}
+        Личная информация
       </button>
-      <button
-        @click="this.active = 2"
-        class="btn"
-        :class="{ active: this.active == 2 }"
-      >
-        Google 2Fa
-      </button>
-      <button
-        @click="this.active = 3"
-        class="btn"
-        :class="{ active: this.active == 3 }"
-      >
-        {{ $t("walletPayments") }}
-      </button>
+      <button @click="goAdmin()" v-if="admin" class="btn">Админка</button>
     </div>
     <div class="info" v-if="active == 1">
       <div class="personal">
@@ -351,11 +144,13 @@ export default {
             }}</span>
           </div>
           <div class="group">
-            <select v-model="profiletype" id="">
-              <option value="id">{{ $t("individual") }}</option>
-              <option value="business">{{ $t("bisnes") }}</option>
-            </select>
-            <span class="group-value">{{ $t("typeProfile") }}</span>
+            <input
+              type="text"
+              name="login"
+              v-model="login"
+              placeholder="Придумайте себе имя пользователя"
+            />
+            <span class="group-value">Имя пользователя</span>
           </div>
           <div class="group">
             <input
@@ -398,18 +193,6 @@ export default {
             <span class="group-value">{{ $t("phone") }}</span>
           </div>
           <div class="group">
-            <select v-model="country">
-              <option
-                v-for="item in countries"
-                :value="item.short_code"
-                :key="item.id"
-              >
-                {{ item.name }}
-              </option>
-            </select>
-            <span class="group-value">{{ $t("country") }}</span>
-          </div>
-          <div class="group">
             <input
               type="text"
               name="address"
@@ -417,15 +200,6 @@ export default {
               :placeholder="$t('enterAddress')"
             />
             <span class="group-value">{{ $t("address") }}</span>
-          </div>
-          <div class="group">
-            <input
-              type="text"
-              name="inn"
-              v-model="inn"
-              :placeholder="$t('enterInn')"
-            />
-            <span class="group-value">{{ $t("inn") }}</span>
           </div>
           <div class="group">
             <input
@@ -450,211 +224,7 @@ export default {
             {{ message }}
           </div>
         </div>
-        <button @click="exit()" class="btn exit">{{ $t("exit") }}</button>
-      </div>
-      <div class="pass">
-        <h3>{{ $t("changePass") }}</h3>
-        <div class="pass_info">
-          <div class="group">
-            <input
-              type="password"
-              name="password"
-              v-model="old_password"
-              :placeholder="$t('enterPass')"
-            />
-            <span class="group-value">{{ $t("oldPass") }}</span>
-          </div>
-          <div class="group">
-            <input
-              type="password"
-              name="password"
-              v-model="new_password"
-              :placeholder="$t('enterNewPassword')"
-            />
-            <span class="group-value">{{ $t("newPass") }}</span>
-          </div>
-          <div class="group">
-            <input
-              type="password"
-              name="password2"
-              v-model="new_password2"
-              :placeholder="$t('enterNewPassAgain')"
-            />
-            <span class="group-value">{{ $t("passAgain") }}</span>
-          </div>
-          <div class="group">
-            <input
-              type="text"
-              name="code"
-              v-model="otp"
-              :placeholder="$t('enterCode')"
-            />
-            <span class="group-value">{{ $t("code2fa") }}:</span>
-          </div>
-          <button class="btn" v-if="!message2" @click="updatePassword">
-            {{ $t("changePass") }}
-          </button>
-          <div
-            class="msg"
-            :class="{
-              success: this.message2 == 'Успешно',
-              error: this.message2 == 'Пароли не совпадают!',
-            }"
-            v-if="message2"
-          >
-            {{ message2 }}
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="fa2" v-if="active == 2 && !mfa_url && !mfa">
-      <div class="open" v-if="!confirm2fa && !mfa">
-        <h3>1. {{ $t("openGoogle") }}</h3>
-        <div class="open_info">
-          <p class="text">
-            {{ $t("google2fa") }}
-          </p>
-          <div class="group">
-            <input
-              type="password"
-              name="password"
-              v-model="password"
-              :placeholder="$t('enterCurrentPass')"
-            />
-            <span class="group-value">{{ $t("pass") }}</span>
-          </div>
-          <button @click="getmfa" type="button" class="btn" v-if="!message5">
-            {{ $t("getQr") }}
-          </button>
-          <div
-            class="msg"
-            :class="{
-              success: this.message5 == 'Успешно',
-              error: this.message5 != 'Успешно',
-            }"
-            v-if="message5"
-          >
-            {{ message5 }}
-          </div>
-        </div>
-      </div>
-      <div class="confirmation" v-if="confirm2fa">
-        <h3>2. {{ $t("confirCode2fa") }}</h3>
-        <div class="confirmation_info">
-          <p class="text">
-            {{ $t("enterCode2fa") }}
-          </p>
-          <div class="group">
-            <input
-              type="text"
-              name="code_2fa"
-              v-model="code_2fa"
-              :placeholder="$t('enterCode')"
-            />
-            <span class="group-value">{{ $t("code2fa") }}:</span>
-          </div>
-          <button v-if="!message3" type="button" class="btn" @click="enablemfa">
-            {{ $t("enable2fa") }}
-          </button>
-          <div
-            class="msg"
-            :class="{
-              success: this.message3 == 'Успешно',
-              error: this.message3 == 'Неверный код',
-            }"
-            v-if="message3"
-          >
-            {{ message3 }}
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="qr" v-if="mfa_url && !confirm2fa && !mfa">
-      <span>{{ $t("scanQr") }}</span>
-      <qrcode class="qrcode" :value="mfa_url"></qrcode>
-      <a :href="mfa_url">{{ mfa_url }}</a>
-      <button @click="authComfirm" type="button" class="btn">
-        {{ $t("continue") }}
-      </button>
-    </div>
-    <div class="enabled" v-if="mfa && active == 2">
-      <img src="../assets/enabled.png" alt="" />
-      <span>{{ $t("connected2fa") }}</span>
-      <button
-        v-if="mfa"
-        class="btn exit"
-        @click="this.$emit('updateDeleteAuth', true)"
-      >
-        {{ $t("disable2fa") }}
-      </button>
-    </div>
-    <div class="wallet" v-if="active == 3">
-      <div class="current_wallet" v-if="wallet">
-        <h3>{{ $t("currentWallet") }}</h3>
-        <div class="wallet_info">
-          <div class="group">
-            <input type="text" name="wallet" v-model="wallet" placeholder="" />
-            <span class="group-value">{{ $t("wallet") }}</span>
-          </div>
-          <div class="group">
-            <input
-              type="text"
-              name="code"
-              v-model="otp2"
-              :placeholder="$t('enterCode')"
-            />
-            <span class="group-value">{{ $t("code2fa") }}:</span>
-          </div>
-          <button v-if="!messageWallet" @click="deleteWallet" class="btn">
-            {{ $t("delete") }}
-          </button>
-          <div
-            class="msg"
-            :class="{
-              success: this.messageWallet == $t('success'),
-              error: this.messageWallet != $t('success'),
-            }"
-            v-if="messageWallet"
-          >
-            {{ messageWallet }}
-          </div>
-        </div>
-      </div>
-      <div class="connect_wallet" v-if="!wallet">
-        <h3>{{ $t("connectWallet") }}</h3>
-        <div class="connect_info">
-          <div class="group">
-            <input
-              type="text"
-              name="walletNew"
-              v-model="walletNew"
-              :placeholder="$t('newWallet')"
-            />
-            <span class="group-value">{{ $t("addWallet") }}</span>
-          </div>
-          <div class="group">
-            <input
-              type="text"
-              name="code"
-              v-model="otp"
-              :placeholder="$t('enterCode')"
-            />
-            <span class="group-value">{{ $t("code2fa") }}:</span>
-          </div>
-          <button v-if="!message4" @click="setWallet" class="btn">
-            {{ $t("add") }}
-          </button>
-          <div
-            class="msg"
-            :class="{
-              success: this.message4 == $t('success'),
-              error: this.message4 != $t('success'),
-            }"
-            v-if="message4"
-          >
-            {{ message4 }}
-          </div>
-        </div>
+        <button @click="exit()" class="btn exit">Выйти</button>
       </div>
     </div>
   </div>
@@ -712,7 +282,7 @@ export default {
 .connect_info button,
 .open_info button,
 .confirmation_info button {
-  background-color: #cf0032;
+  background-color: #aa6a2a;
   color: #fff;
 }
 
@@ -763,7 +333,7 @@ input::placeholder {
 }
 
 .active {
-  background-color: #cf0032;
+  background-color: #aa6a2a;
   color: #fff;
 }
 
@@ -794,7 +364,7 @@ h3 {
 }
 
 .error {
-  background-color: #cf0032;
+  background-color: #aa6a2a;
 }
 
 .qr {
@@ -808,26 +378,6 @@ h3 {
   margin: 0 auto;
   flex-direction: column;
   gap: 20px;
-}
-
-.qr span {
-  font-size: 20px;
-  line-height: 20px;
-  font-weight: 600;
-}
-
-.qr a {
-  word-break: break-all;
-}
-
-.qr .btn {
-  background-color: #cf0032;
-  color: #fff;
-}
-
-.qrcode {
-  width: 200px !important;
-  height: 200px !important;
 }
 
 .exit {
@@ -855,7 +405,7 @@ h3 {
   font-weight: 400;
   font-size: 14px;
   line-height: 14px;
-  color: #cf0032;
+  color: #aa6a2a;
   text-decoration: underline;
   cursor: pointer;
 }

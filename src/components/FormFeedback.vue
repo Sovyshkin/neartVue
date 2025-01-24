@@ -174,7 +174,7 @@ export default {
 
 .btn {
   width: 100%;
-  background-color: #cf0032;
+  background-color: #aa6a2a;
   border-radius: 10px;
   padding: 17px 24px;
   color: #fff;
@@ -185,8 +185,8 @@ export default {
 
 .btn-cancel {
   background-color: #fff;
-  border: 1px solid #cf0032;
-  color: #cf0032;
+  border: 1px solid #aa6a2a;
+  color: #aa6a2a;
 }
 
 .log {
@@ -204,7 +204,7 @@ a {
 }
 
 a {
-  color: #cf0032;
+  color: #aa6a2a;
 }
 
 .cancel {

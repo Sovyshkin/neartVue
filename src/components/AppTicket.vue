@@ -232,7 +232,7 @@ export default {
 input,
 textarea {
   width: 100%;
-  border: 1px solid #cf0032;
+  border: 1px solid #aa6a2a;
   border-radius: 8px;
   padding: 16px;
 }
@@ -247,7 +247,7 @@ textarea::placeholder {
 
 .btn {
   width: fit-content;
-  background-color: #cf0032;
+  background-color: #aa6a2a;
   border-radius: 10px;
   padding: 12px 17px;
   color: #fff;
@@ -284,7 +284,7 @@ textarea::placeholder {
 }
 
 .userMessage {
-  background-color: #cf0032;
+  background-color: #aa6a2a;
   color: #fff;
 }
 
@@ -292,7 +292,7 @@ textarea::placeholder {
   width: fit-content;
   min-width: 200px;
   padding: 10px;
-  border: 1px solid #cf0032;
+  border: 1px solid #aa6a2a;
   border-radius: 20px;
   position: relative;
 }

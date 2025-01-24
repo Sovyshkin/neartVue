@@ -61,102 +61,39 @@ export default {
         }
       }
     },
-
-    async load_avatar() {
+    goRoute(name) {
       try {
-        let response = await axios.get(`/users/${localStorage.getItem("id")}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-        console.log("HEADER", response);
-        this.lang = response.data.user.lang;
-        this.$i18n.locale = this.lang;
-        let app = document.querySelector(`.wrap`);
-        if (this.lang == "HE") {
-          app.style.direction = "rtl";
-        } else {
-          app.style.direction = "ltr";
-        }
-        this.active_billings = response.data.user.active_billings;
-        this.avatar = response.data.user.image.url;
-      } catch (err) {
-        console.log(err);
-      }
-    },
-
-    async changeLang(lang) {
-      try {
-        this.lang = lang;
-        let response = await axios.post(
-          `/users/update/lang`,
-          {
-            lang: lang,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-        console.log(response);
-        if (response.data.status == "ok") {
-          this.$i18n.locale = lang;
-          location.reload();
-        }
+        this.$router.push({ name: name });
       } catch (err) {
         console.log(err);
       }
     },
   },
-  mounted() {
-    this.verify_token();
-    this.id = localStorage.getItem("id") || null;
-
-    window.addEventListener("storage", () => {
-      this.id = localStorage.getItem("id") || null;
-    });
-    this.load_avatar();
-  },
+  mounted() {},
 };
 </script>
 <template>
   <div class="wrapper">
-    <img
-      @click="this.$router.push({ name: 'main' })"
-      class="logo"
-      src="../assets/logo.png"
-      alt=""
-    />
+    <div class="logo" @click="this.$router.push({ name: 'home' })">
+      <img class="mainLogo" src="../assets/logo.png" alt="" />
+      <img class="logoText" src="../assets/logoText.png" alt="" />
+    </div>
     <nav class="group">
-      <li class="item-group">{{ this.$t("equipment") }}</li>
-      <li class="item-group">{{ $t("applications") }}</li>
-      <div class="lan" @click="active = !active">
-        <img class="flag" :src="'../assets/' + lang + '.png'" alt="" />
-        <span class="name-country">{{ lang }}</span>
-        <img class="arrow" src="../assets/arrow-down-white.png" alt="" />
-        <div class="all_flags" v-if="active">
-          <div
-            class="group-country"
-            @click="changeLang(item)"
-            v-for="item in countries"
-            :key="item"
-          >
-            <img class="flag" :src="'../assets/' + item + '.png'" alt="" />
-            <span class="group-value">{{ item }}</span>
-          </div>
-        </div>
-      </div>
+      <li class="item-group" @click="goRoute('home')">Главная</li>
+      <li @click="goRoute('arts')" class="item-group">Картины</li>
+      <li class="item-group" @click="goRoute('aboutUs')">О нас</li>
     </nav>
     <div class="info">
-      <span class="text">Totalminer 2024 All Rights Reserved</span>
-      <div class="contacts">
-        <img src="../assets/WhatsApp.svg" alt="" />
-        <span>WhatsApp</span>
+      <span class="text">&copy;2025 НеХудожник | Все права защищены</span>
+      <a
+        href="https://t.me/vselena_deva"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="contacts"
+      >
         <img src="../assets/Telegram.svg" alt="" />
-        <span>Telegram</span>
-        <span class="number">+972 50-8981614</span>
-      </div>
+        <span class="number">@vselena_deva</span>
+      </a>
       <div class="group-span">
         <span class="text">{{ $t("policy") }}</span>
         <span class="text">{{ $t("offer") }}</span>
@@ -188,9 +125,11 @@ export default {
 }
 
 .contacts {
+  transform: translateX(-15px);
   display: flex;
   align-items: center;
-  gap: 15px;
+  justify-content: center;
+  gap: 7px;
 }
 
 .flag {
@@ -207,6 +146,7 @@ export default {
   font-weight: 400;
   font-size: 12px;
   line-height: 14px;
+  cursor: pointer;
 }
 
 .contacts span {
@@ -218,7 +158,7 @@ export default {
 
 .item-group::after {
   margin-top: 2px;
-  background-color: #cf0032; /* Цвет линии при наведении на нее курсора мыши */
+  background-color: #aa6a2a; /* Цвет линии при наведении на нее курсора мыши */
   display: block;
   content: "";
   height: 2px; /* Высота линии */
@@ -271,12 +211,22 @@ export default {
 }
 
 .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   height: 60px;
   cursor: pointer;
-  transition: all 500ms ease;
 }
 
-.logo:hover,
+.mainLogo {
+  width: 70px;
+}
+
+.logoText {
+  width: 180px;
+  padding-top: 10px;
+}
+
 .contacts img:hover {
   transform: translateY(-3px);
 }
@@ -312,6 +262,10 @@ export default {
   }
   .group-span {
     align-items: center;
+  }
+
+  .contacts {
+    transform: none;
   }
 }
 

@@ -171,7 +171,7 @@ export default {
   border-radius: 10px;
   padding: 12px 17px;
   color: #fff;
-  background-color: #cf0032;
+  background-color: #aa6a2a;
 }
 
 .not_found {
@@ -258,7 +258,7 @@ export default {
 }
 
 .offline {
-  background-color: #cf0032;
+  background-color: #aa6a2a;
 }
 
 .group-payment,

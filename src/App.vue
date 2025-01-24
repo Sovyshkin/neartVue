@@ -1,52 +1,35 @@
 <script>
+/* eslint-disable */
 import AppHeader from "./components/AppHeader.vue";
 import Block_1 from "./components/Block_1.vue";
-import Calculator from "./components/BlockCalculator.vue";
-import Equipment from "./components/BlockEquipment.vue";
-import Banner_1 from "./components/Banner_1.vue";
+// import Banner_1 from "./components/Banner_1.vue";
 import Advantages from "./components/BlockAdvantages.vue";
-import Business from "./components/BlockBusiness.vue";
 import Faq from "./components/BlockFaq.vue";
-import Banner_2 from "./components/Banner_2.vue";
 import GoTry from "./components/GoTry.vue";
-import AppLogin from "./components/AppLogin.vue";
-import AppRegister from "./components/AppRegister.vue";
 import ResetPassword from "./components/ResetPassword.vue";
-import LeftPanel from "./components/LeftPanel.vue";
-import BottomPanel from "./components/BottomPanel.vue";
 import DeleteWallet from "./components/DeleteWallet.vue";
 import DeleteAuth from "./components/DeleteAuth.vue";
 import { RouterView } from "vue-router";
-import SliderImg from "./components/SliderImg.vue";
-import ChangeAvatar from "./components/ChangeAvatar.vue";
-import FormFeedback from "./components/FormFeedback.vue";
+// import FormFeedback from "./components/FormFeedback.vue";
 import AppFooter from "./components/AppFooter.vue";
+import MiniMarket from "./components/BlockMiniMarket.vue";
 
 export default {
   name: "App",
   components: {
     AppHeader,
     Block_1,
-    Calculator,
-    Equipment,
-    Banner_1,
-    Business,
+    // Banner_1,
     Faq,
-    Banner_2,
     Advantages,
     GoTry,
-    AppLogin,
-    AppRegister,
     ResetPassword,
     RouterView,
-    LeftPanel,
-    BottomPanel,
     DeleteWallet,
-    SliderImg,
-    ChangeAvatar,
     DeleteAuth,
-    FormFeedback,
+    // FormFeedback,
     AppFooter,
+    MiniMarket,
   },
   data() {
     return {
@@ -98,20 +81,16 @@ export default {
     handleFormFeedback(form) {
       this.formFeedback = form;
     },
-
-    sliderVerify(slider) {
-      this.login = slider;
-      this.slider = true;
-    },
     checkRoute() {
-      if (this.$route.fullPath == "/") {
-        return true;
+      try {
+        if (this.$route.fullPath == "/") {
+          return true;
+        }
+        return false;
+      } catch (err) {
+        console.log("ошибка тут");
+        console.log(err);
       }
-      return false;
-    },
-
-    pass() {
-      console.log("Тут");
     },
   },
   mounted() {},
@@ -119,99 +98,32 @@ export default {
 </script>
 <template>
   <div class="wrap" v-if="checkRoute()" style="align-items: center">
-    <FormFeedback
+    <!-- <FormFeedback
       v-if="formFeedback"
       @updateFormFeedback="handleFormFeedback"
-    />
-    <SliderImg
-      v-if="slider"
-      @updateSlider="handleSlider"
-      @sliderVerify="sliderVerify"
-    />
+    /> -->
     <ResetPassword @updateReset="handleReset" v-if="reset" />
-    <AppRegister @updateRegister="handleRegister" v-if="register" />
-    <AppLogin
-      @updateLogin="handleLogin"
-      @updateRegister="handleRegister"
-      @updateReset="handleReset"
-      @sliderVerify="sliderVerify"
-      v-if="login"
-    />
     <GoTry
       @updateGoTry="handleTry"
       @updateRegister="handleRegister"
       @updateLogin="handleLogin"
       v-if="gotry"
     />
-    <AppHeader @updateLogin="handleLogin" />
+    <AppHeader @updateLogin="handleLogin" :register="register" :login="login" />
     <Block_1
       @updateLogin="handleLogin"
       @updateFormFeedback="handleFormFeedback"
-      style="max-width: 1440px"
     />
-    <Calculator @updateGoTry="handleTry" style="max-width: 1440px" />
-    <Equipment
-      style="max-width: 1440px"
-      @updateGoTry="handleTry"
-      id="equipment"
-    />
-    <Banner_1
-      style="max-width: 1440px"
-      @updateFormFeedback="handleFormFeedback"
-    />
-    <Advantages style="max-width: 1440px" id="advantages" />
-    <Business
-      @updateLogin="handleLogin"
-      style="max-width: 1440px"
-      id="business"
-    />
-    <Faq @updateLogin="handleLogin" style="max-width: 1440px" id="faq" />
-    <Banner_2 @updateLogin="handleLogin" style="max-width: 1440px" />
-    <AppFooter />
-  </div>
-  <div
-    class="wrap more"
-    v-else-if="
-      this.$route.fullPath == '/404' || this.$route.name == 'controlreset'
-    "
-  >
-    <SliderImg
-      v-if="slider"
-      @sliderVerify="sliderVerify"
-      @updateSlider="handleSlider"
-    />
-    <ResetPassword @updateReset="handleReset" v-if="reset" />
-    <AppRegister @updateRegister="handleRegister" v-if="register" />
-    <AppLogin
-      @updateLogin="handleLogin"
-      @updateRegister="handleRegister"
-      @updateReset="handleReset"
-      @sliderVerify="sliderVerify"
-      v-if="login"
-    />
-    <GoTry
-      @updateGoTry="handleTry"
-      @updateRegister="handleRegister"
-      @updateLogin="handleLogin"
-      v-if="gotry"
-    />
-    <AppHeader @updateLogin="handleLogin" @updateSlider="handleSlider" />
-    <RouterView />
+    <MiniMarket />
+
+    <Advantages id="advantages" />
+    <Faq @updateLogin="handleLogin" id="faq" />
     <AppFooter />
   </div>
   <div class="wrap market" v-else>
-    <ChangeAvatar @updateAvatar="handleAvatar" v-if="avatar" />
-    <LeftPanel class="leftPanel" />
-    <BottomPanel class="bottomPanel" />
-    <DeleteWallet @updateDeleteWallet="handleDelete" v-if="this.deleteWallet" />
-    <DeleteAuth @updateDeleteAuth="handleDeleteAuth" v-if="this.deleteAuth" />
     <main class="marketplace">
-      <AppHeader :login="true" />
-      <RouterView
-        @updateDeleteWallet="handleDelete"
-        @updateDeleteAuth="handleDeleteAuth"
-        @updateAvatar="handleAvatar"
-      />
+      <AppHeader />
+      <RouterView />
       <AppFooter />
     </main>
   </div>
@@ -235,6 +147,10 @@ export default {
 *::before,
 *::after {
   box-sizing: border-box;
+}
+
+h2 {
+  text-align: center;
 }
 
 .wrap {
@@ -281,11 +197,6 @@ header,
 section,
 main {
   display: block;
-}
-
-ul,
-ul li {
-  list-style: none;
 }
 
 img {
@@ -391,6 +302,43 @@ button::-moz-focus-inner {
 .bx:hover,
 .btn:hover {
   box-shadow: 0 0 10px 0 #00000037;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.flex {
+  display: flex;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.pb-16 {
+  padding-bottom: 4rem;
 }
 @media (max-width: 768px) {
   .leftPanel {

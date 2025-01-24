@@ -6,26 +6,11 @@ export default {
   components: { LoadingSpinner },
   data() {
     return {
-      name: "",
-      nameFill: false,
-      surname: "",
-      surnameFill: false,
-      password: "",
-      passFill: false,
-      password2: "",
-      pass2Fill: false,
-      number: "+972",
-      numberFill: false,
+      username: "",
       email: "",
-      emailFill: "",
       message: "",
       isLoading: false,
     };
-  },
-  computed: {
-    formatPhoneNumber() {
-      return this.number ? this.number.replace(/[^+\d]/g, "") : "";
-    },
   },
   methods: {
     cancel() {
@@ -33,79 +18,35 @@ export default {
       this.$emit("updateRegister", false);
     },
 
-    async login() {
+    async log() {
       try {
-        if (
-          this.name &&
-          this.surname &&
-          this.password &&
-          this.number.length > 11 &&
-          this.email
-        ) {
-          (this.nameFill = false),
-            (this.surnameFill = false),
-            (this.passFill = false),
-            (this.numberFill = false),
-            (this.emailFill = false);
-          this.isLoading = true;
-          let response = await axios.post(`/auth/register`, {
-            firstname: this.name,
-            lastname: this.surname,
+        if (this.username && this.email) {
+          let response = await axios.post(`/register`, {
+            username: this.username,
             email: this.email,
-            password: this.password,
-            phone: this.number,
           });
-          let status = response.status;
           console.log(response);
-          if (status == "200") {
-            this.message = this.$t("success");
+          this.message = response.data.message;
+          this.id = response.data.id;
+          let cart_id = response.data.cart_id;
+          if (this.message == "Успешно") {
+            localStorage.setItem("id", this.id);
+            localStorage.setItem("cart_id", cart_id);
+            setTimeout(() => {
+              this.message = "";
+            }, 2500);
           }
           setTimeout(() => {
             this.message = "";
-            this.$emit("updateRegister", false);
-          }, 3000);
-        } else {
-          if (!this.name) {
-            this.nameFill = true;
-          }
-          if (!this.surname) {
-            this.surnameFill = true;
-          }
-          if (!this.password) {
-            this.passFill = true;
-          }
-          if (this.number.length < 11) {
-            this.numberFill = true;
-          }
-          if (!this.email) {
-            this.emailFill = true;
-          }
+          }, 2500);
         }
       } catch (err) {
-        console.log(err.response.data.detail);
-        if (err.response.data.detail == "User already exists") {
-          this.message = "Пользователь с такими данными уже существует";
-          (this.nameFill = true),
-            (this.surnameFill = true),
-            (this.passFill = true),
-            (this.pass2Fill = true),
-            (this.numberFill = true),
-            (this.emailFill = true);
-          setTimeout(() => {
-            this.message = "";
-          }, 3000);
-        }
-      } finally {
-        this.isLoading = false;
+        console.log(err);
       }
     },
-    updateValue(e) {
-      let input = e.target.value.replace(/[^+\d]/g, "");
-      if (!input.startsWith("+")) {
-        input = "+";
-      }
-      this.number = input;
-      e.target.value = this.formatPhoneNumber;
+
+    close() {
+      this.$emit("close", false);
     },
   },
   mounted() {
@@ -115,98 +56,40 @@ export default {
 };
 </script>
 <template>
-  <div class="wrapper">
-    <LoadingSpinner v-if="isLoading" />
-    <div class="card">
-      <div class="cancel">
-        <span class="title">{{ $t("registration") }}</span>
-        <img @click="cancel" src="../assets/close.png" alt="" />
-      </div>
-      <div class="group">
-        <input
-          type="text"
-          name="name"
-          v-model="name"
-          :placeholder="$t('enterName')"
-          :class="{ nofillBorder: nameFill }"
-        />
-        <span class="group-value" :class="{ nofillText: nameFill }">{{
-          $t("name")
-        }}</span>
-      </div>
-      <div class="group">
-        <input
-          type="text"
-          name="surname"
-          v-model="surname"
-          :placeholder="$t('enterSurname')"
-          :class="{ nofillBorder: surnameFill }"
-        />
-        <span class="group-value" :class="{ nofillText: surnameFill }">{{
-          $t("surname")
-        }}</span>
-      </div>
-      <div class="group">
-        <input
-          type="email"
-          name="email"
-          v-model="email"
-          :placeholder="$t('enterEmail')"
-          :class="{ nofillBorder: emailFill }"
-        />
-        <span class="group-value" :class="{ nofillText: emailFill }"
-          >Email</span
-        >
-      </div>
-      <div class="group">
-        <input
-          :value="formatPhoneNumber"
-          @input="updateValue($event)"
-          type="tel"
-          size="20"
-          required
-          name="number"
-          placeholder="+972"
-          :class="{ nofillBorder: numberFill }"
-        />
-        <span class="group-value" :class="{ nofillText: numberFill }">{{
-          $t("phone")
-        }}</span>
-      </div>
-      <div class="group">
-        <input
-          type="password"
-          name="password"
-          v-model="password"
-          :placeholder="$t('enterPass')"
-          :class="{ nofillBorder: passFill }"
-        />
-        <span class="group-value" :class="{ nofillText: passFill }">{{
-          $t("pass")
-        }}</span>
-      </div>
-      <!-- <div class="group">
-        <input
-          type="password"
-          name="password2"
-          v-model="password2"
-          placeholder="Повторите пароль"
-        />
-        <span class="group-value">Пароль</span>
-      </div> -->
-      <button @click="login" v-if="!message" class="btn">
-        {{ $t("register") }}
-      </button>
-      <div
-        class="msg"
-        :class="{
-          success: this.message == 'Успешно',
-          error: this.message != 'Успешно',
-        }"
-        v-if="message"
-      >
-        {{ message }}
-      </div>
+  <LoadingSpinner v-if="isLoading" />
+  <div class="card">
+    <div class="cancel">
+      <span class="title">Регистрация</span>
+      <img @click="close" src="../assets/close.png" alt="" />
+    </div>
+    <div class="group">
+      <input
+        type="text"
+        name="username"
+        v-model="username"
+        placeholder="Введите свой логин"
+      />
+      <span class="group-value">Логин</span>
+    </div>
+    <div class="group">
+      <input
+        type="email"
+        name="email"
+        v-model="email"
+        placeholder="Введите свою почту"
+      />
+      <span class="group-value">Email</span>
+    </div>
+    <button @click="login" v-if="!message" class="btn">Авторизоваться</button>
+    <div
+      class="msg"
+      :class="{
+        success: this.message == 'Успешно',
+        error: this.message != 'Успешно',
+      }"
+      v-if="message"
+    >
+      {{ message }}
     </div>
   </div>
 </template>
@@ -250,7 +133,7 @@ export default {
 
 .btn {
   width: 100%;
-  background-color: #cf0032;
+  background-color: #aa6a2a;
   border-radius: 10px;
   padding: 17px 24px;
   color: #fff;
@@ -274,7 +157,7 @@ a {
 }
 
 a {
-  color: #cf0032;
+  color: #aa6a2a;
 }
 
 .cancel {
@@ -344,15 +227,15 @@ input::placeholder {
 }
 
 .error {
-  background-color: #cf0032;
+  background-color: #aa6a2a;
 }
 
 .nofillBorder {
-  border: 1px solid #cf0032;
+  border: 1px solid #aa6a2a;
 }
 
 .nofillText {
-  color: #cf0032;
+  color: #aa6a2a;
 }
 
 @media (max-width: 680px) {

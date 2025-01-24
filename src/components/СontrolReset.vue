@@ -123,7 +123,7 @@ export default {
 
 .btn {
   width: 100%;
-  background-color: #cf0032;
+  background-color: #aa6a2a;
   border-radius: 10px;
   padding: 17px 24px;
   color: #fff;
@@ -147,7 +147,7 @@ a {
 }
 
 a {
-  color: #cf0032;
+  color: #aa6a2a;
 }
 
 .cancel {
@@ -198,7 +198,7 @@ input::placeholder {
 }
 
 .red {
-  color: #cf0032;
+  color: #aa6a2a;
 }
 
 .card:hover {
@@ -220,6 +220,6 @@ input::placeholder {
 }
 
 .error {
-  background-color: #cf0032;
+  background-color: #aa6a2a;
 }
 </style>
