@@ -1,9 +1,11 @@
 <script>
 import axios from "axios";
 import LoadingSpinner from "./LoadingSpinner.vue";
+import AppLogin from "./AppLogin.vue";
+import AppRegister from "./AppRegister.vue";
 export default {
   name: "CardOpen",
-  components: { LoadingSpinner },
+  components: { LoadingSpinner, AppLogin, AppRegister },
   data() {
     return {
       items: [],
@@ -18,6 +20,8 @@ export default {
       is_favorite: false,
       message: "",
       cart_id: localStorage.getItem("cart_id"),
+      showRegister: false,
+      showLogin: false,
     };
   },
   methods: {
@@ -26,9 +30,14 @@ export default {
         this.isLoading = true;
         this.customer_id = localStorage.getItem("id");
         this.id = this.$route.query.id;
-        let response = await axios.get(
-          `/get_picture/${this.id}?customer_id=${this.customer_id}`
-        );
+        let response;
+        if (this.customer_id) {
+          response = await axios.get(
+            `/get_picture/${this.id}?customer_id=${this.customer_id}`
+          );
+        } else {
+          response = await axios.get(`/get_picture/${this.id}`);
+        }
         console.log(response);
         this.title = response.data.title;
         this.description = response.data.description;
@@ -43,16 +52,22 @@ export default {
     },
     async addCart() {
       try {
-        this.isLoading = true;
-        let response = await axios.post(`/add_elem`, {
-          cart_id: this.cart_id,
-          picture_id: this.id,
-        });
-        console.log(response);
-        this.message = response.data.message;
-        setTimeout(() => {
-          this.message = "";
-        }, 3500);
+        this.cart_id = localStorage.getItem("cart_id");
+        this.customer_id = localStorage.getItem("id");
+        if (this.cart_id && this.customer_id) {
+          this.isLoading = true;
+          let response = await axios.post(`/add_elem`, {
+            cart_id: this.cart_id,
+            picture_id: this.id,
+          });
+          console.log(response);
+          this.message = response.data.message;
+          setTimeout(() => {
+            this.message = "";
+          }, 3500);
+        } else {
+          this.showRegister = true;
+        }
       } catch (err) {
         console.log(err);
         this.message = err.response.data.detail;
@@ -66,8 +81,29 @@ export default {
 
     async addFav() {
       try {
+        this.cart_id = localStorage.getItem("cart_id");
+        this.customer_id = localStorage.getItem("id");
+        if (this.cart_id && this.customer_id) {
+          this.isLoading = true;
+          let response = await axios.post(`/favorites/add`, {
+            customer_id: localStorage.getItem("id"),
+            picture_id: this.id,
+          });
+          console.log(response);
+          this.load_pic();
+        } else {
+          this.showRegister = true;
+        }
+      } catch (err) {
+        console.log(err);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    async removeFav() {
+      try {
         this.isLoading = true;
-        let response = await axios.post(`/favorites/add`, {
+        let response = await axios.post(`/favorites/remove`, {
           customer_id: localStorage.getItem("id"),
           picture_id: this.id,
         });
@@ -79,23 +115,18 @@ export default {
         this.isLoading = false;
       }
     },
-    async removeFav() {
-      try {
-        this.isLoading = true;
-        let response = await axios.post(
-          `http://45.12.238.27:5000/favorites/remove`,
-          {
-            customer_id: localStorage.getItem("id"),
-            picture_id: this.id,
-          }
-        );
-        console.log(response);
-        this.load_pic();
-      } catch (err) {
-        console.log(err);
-      } finally {
-        this.isLoading = false;
+    openDialog(type) {
+      if (type == "login") {
+        this.showLogin = true;
+      } else {
+        this.showRegister = true;
       }
+    },
+    handleLog() {
+      this.showLogin = false;
+      setTimeout(() => {
+        this.showRegister = true;
+      }, 300);
     },
   },
   async mounted() {
@@ -142,6 +173,12 @@ export default {
       <span class="desc">{{ description }}</span>
     </div>
   </section>
+  <v-dialog max-width="500" v-model="showLogin">
+    <AppLogin @close="showLogin = false" @goReg="handleLog" />
+  </v-dialog>
+  <v-dialog max-width="500" v-model="showRegister">
+    <AppRegister @close="showRegister = false" />
+  </v-dialog>
   <div
     class="msg"
     :class="{

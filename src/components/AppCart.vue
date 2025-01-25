@@ -30,6 +30,19 @@ export default {
         this.isLoading = false;
       }
     },
+
+    async addOrder() {
+      try {
+        this.cart_id = localStorage.getItem("cart_id");
+        this.id = localStorage.getItem("id");
+        this.isLoading = true;
+        // let response = await axios.post(`/orders/add`, {
+        //   customer_id: this.
+        //  })
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
   mounted() {
     this.load_info();

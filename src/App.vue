@@ -93,7 +93,6 @@ export default {
       }
     },
   },
-  mounted() {},
 };
 </script>
 <template>
@@ -122,8 +121,8 @@ export default {
   </div>
   <div class="wrap market" v-else>
     <main class="marketplace">
-      <AppHeader />
-      <RouterView />
+      <AppHeader @updateAuth="handleAuth" />
+      <RouterView @updateAuth="handleAuth" />
       <AppFooter />
     </main>
   </div>
