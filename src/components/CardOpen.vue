@@ -15,6 +15,8 @@ export default {
       id: "",
       title: "",
       price: "",
+      size: "",
+      status: "",
       img_urls: [],
       description: "",
       is_favorite: false,
@@ -44,6 +46,8 @@ export default {
         this.price = response.data.price;
         this.is_favorite = response.data.is_favorite;
         this.img_urls = response.data.img_urls;
+        this.size = response.data.size;
+        this.status = response.data.status;
       } catch (err) {
         console.log(err);
       } finally {
@@ -142,16 +146,30 @@ export default {
       cycle
       hide-delimiter-background
       class="carousel"
+      height="auto"
     >
       <v-carousel-item
         v-for="img in img_urls"
         :key="img"
         :src="`http://45.12.238.27:5000/images/${img}`"
-        cover
+        class="carousel-item"
+        aspect-ratio="4 / 3"
       ></v-carousel-item>
     </v-carousel>
     <div class="info">
       <h1>{{ title }}</h1>
+      <div class="status">
+        <img src="../assets/in-stock.png" v-if="status == 'В наличии'" alt="" />
+        <img
+          src="../assets/not-stock.png"
+          v-if="status == 'Нет в наличии'"
+          alt=""
+        />{{ status }}
+      </div>
+      <div class="size">
+        <span class="size-text">Размер:</span
+        ><span class="size-value">{{ size }}</span>
+      </div>
       <div class="product-actions">
         <span class="price">{{ price }} ₽</span>
         <img
@@ -200,7 +218,7 @@ export default {
 }
 
 .carousel {
-  width: 50%;
+  width: 70%;
 }
 
 .info {
@@ -250,7 +268,28 @@ export default {
   color: #fff;
 }
 
-.desc {
+.desc,
+.size span,
+.status {
+  font-weight: 500;
+  font-size: 19px;
+  line-height: 22px;
+}
+
+.status img {
+  height: 34px;
+  width: 34px;
+}
+
+.size,
+.status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.size-text {
+  color: #717c8d;
 }
 
 @media (max-width: 968px) {

@@ -7,8 +7,6 @@ import Advantages from "./components/BlockAdvantages.vue";
 import Faq from "./components/BlockFaq.vue";
 import GoTry from "./components/GoTry.vue";
 import ResetPassword from "./components/ResetPassword.vue";
-import DeleteWallet from "./components/DeleteWallet.vue";
-import DeleteAuth from "./components/DeleteAuth.vue";
 import { RouterView } from "vue-router";
 // import FormFeedback from "./components/FormFeedback.vue";
 import AppFooter from "./components/AppFooter.vue";
@@ -25,8 +23,6 @@ export default {
     GoTry,
     ResetPassword,
     RouterView,
-    DeleteWallet,
-    DeleteAuth,
     // FormFeedback,
     AppFooter,
     MiniMarket,

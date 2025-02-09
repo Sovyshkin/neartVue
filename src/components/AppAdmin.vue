@@ -4,11 +4,11 @@ import LoadingSpinner from "./LoadingSpinner.vue";
 import ProductCard from "./ProductCard.vue";
 import AppEmpty from "./AppEmpty.vue";
 export default {
-  name: "AppProfile",
+  name: "AppAdmin",
   components: { LoadingSpinner, ProductCard, AppEmpty },
   data() {
     return {
-      active: 1,
+      active: 2,
       category: "",
       id: "",
       cards: [],
@@ -25,7 +25,7 @@ export default {
       try {
         let response = await axios.get(`/get_artists`);
         console.log(response);
-        this.cards = response.data;
+        this.cards = response.data || [];
       } catch (err) {
         console.log(err);
       }
@@ -35,7 +35,7 @@ export default {
       try {
         let response = await axios.get(`/get_pictures`);
         console.log(response);
-        this.cards = response.data;
+        this.cards = response.data || [];
       } catch (err) {
         console.log(err);
       }
@@ -45,27 +45,31 @@ export default {
       try {
         let response = await axios.get(`/get_orders`);
         console.log(response);
-        this.cards = response.data;
+        this.cards = response.data || [];
       } catch (err) {
         console.log(err);
       }
     },
 
-    check(name) {
-      if (name) {
-        this.category = name;
-      } else {
-        this.category = this.$route.query.name;
-      }
-      if (this.category == "arts") {
-        this.load_arts();
-        this.name = "Картины";
-      } else if (this.category == "artists") {
-        this.load_artists();
-        this.name = "Художники";
-      } else if (this.category == "orders") {
-        this.load_orders();
-        this.name = "Заказы";
+    async check(name) {
+      try {
+        if (name) {
+          this.category = name;
+        } else {
+          this.category = this.$route.query.name;
+        }
+        if (this.category == "arts") {
+          await this.load_arts();
+          this.name = "Картины";
+        } else if (this.category == "artists") {
+          await this.load_artists();
+          this.name = "Художники";
+        } else if (this.category == "orders") {
+          await this.load_orders();
+          this.name = "Заказы";
+        }
+      } catch (err) {
+        console.log(err);
       }
     },
 
@@ -76,6 +80,7 @@ export default {
           this.modal = false;
           this.load_artists();
         }
+        this.message = response.data.message;
       } catch (err) {
         console.log(err);
       }
@@ -85,8 +90,8 @@ export default {
       this.mainID = id;
     },
   },
-  mounted() {
-    this.check();
+  async mounted() {
+    await this.check();
   },
 };
 </script>
@@ -126,7 +131,7 @@ export default {
         </div>
       </div>
     </div>
-    <div class="cards" v-else-if="cards && category == 'arts'">
+    <div class="cards" v-else-if="category == 'arts' && cards?.length">
       <ProductCard
         v-for="card in cards"
         :key="card.id"
@@ -140,14 +145,14 @@ export default {
     </div>
     <AppEmpty v-else />
   </section>
-  <v-dialog v-model="modal">
-    <img
-      @click="modal = false"
-      class="close"
-      src="../assets/close.png"
-      alt=""
-    />
-    <div class="card">
+  <v-dialog class="modal" v-model="modal">
+    <div class="modal-card">
+      <img
+        @click="modal = false"
+        class="close"
+        src="../assets/close.png"
+        alt=""
+      />
       <h1>Вы уверены?</h1>
       <div class="wrap-btns">
         <button class="btn yes" @click="goDelete()">Да</button>
@@ -240,7 +245,22 @@ h1 {
   width: 25px;
 }
 
+.modal-card {
+  position: relative;
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background-color: #fff;
+  margin: 0 auto;
+  border-radius: 20px;
+  padding: 40px 20px 20px 20px;
+}
 .close {
-  width: 40px;
+  position: absolute;
+  top: 5%;
+  right: 5%;
+  cursor: pointer;
+  width: 30px;
 }
 </style>

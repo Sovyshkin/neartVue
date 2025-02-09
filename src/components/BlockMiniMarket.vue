@@ -48,6 +48,7 @@ export default {
         :price="card.price"
         :img_urls="card.img_urls"
         :description="card.description"
+        :status="card.status"
         :cart="card.cart"
         :favorite="card.favorite"
       />

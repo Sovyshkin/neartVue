@@ -5,10 +5,11 @@ export default {
     return {
       title: "",
       description: "",
+      id: "",
       price: "",
-      status: "В наличии",
+      status: "",
       size: "",
-      unique_value: false,
+      unique_value: "",
       artist: {},
       artists: [],
       fileObjects: [],
@@ -16,8 +17,11 @@ export default {
       isImageArray: [],
       fileNameArray: [],
       fileSizeArray: [],
+      img_urls: [],
+      img_remove: [],
       mainStatus: ["Нет в наличии", "В наличии", "Доступно под заказ"],
       message: "",
+      statusRes: "",
     };
   },
   methods: {
@@ -69,47 +73,55 @@ export default {
 
     async save() {
       try {
-        if (this.fileObjects.length > 0) {
-          const formData = new FormData();
-          this.fileObjects.forEach((file) => {
-            formData.append("files", file);
-          });
-          formData.append("artist_id", this.artist.id);
-          formData.append("title", this.title);
-          formData.append("description", this.description);
-          formData.append("price", this.price);
-          formData.append("size", this.size);
-          formData.append("status", this.status);
-          formData.append("unique_value", Number(this.unique_value));
+        let images = [];
+        this.imageUrlArray.forEach((item) => {
+          if (item.includes("http://45.12.238.27:5000/images/")) {
+            images.push(item);
+          }
+        });
+        const formData = new FormData();
+        this.fileObjects.forEach((file) => {
+          formData.append("files", file);
+        });
+        formData.append("img_urls", this.img_remove);
+        formData.append("artist_id", this.artist.id);
+        formData.append("title", this.title);
+        formData.append("description", this.description);
+        formData.append("price", this.price);
+        formData.append("status", this.status);
+        formData.append("size", this.size);
+        formData.append("unique_value", Number(this.unique_value));
+        formData.append("id", this.id);
+        formData.append("created_at", this.formatDate());
 
-          console.log(formData);
-          let response = await axios.post(
-            "http://45.12.238.27:5000/add_picture",
-            formData,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            }
-          );
-          console.log(response);
-          this.message = response.data.message;
-          setTimeout(() => {
-            this.message = "";
-            if (response.status == 200) {
-              this.$router.go(-1);
-            }
-          }, 2500);
-        } else {
-          this.message = "Добавьте хотя бы одно изображение!";
-          setTimeout(() => {
-            this.message = "";
-          }, 4000);
-        }
+        console.log(formData);
+        let response = await axios.post("/update_picture", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        console.log(response);
+        this.message = response.data.message;
+        this.statusRes = response.status;
+        setTimeout(() => {
+          this.message = "";
+        }, 2500);
       } catch (err) {
         console.log(err);
       }
     },
+    formatDate() {
+      const date = new Date();
+
+      // Получаем компоненты даты
+      const day = String(date.getDate()).padStart(2, "0");
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const year = date.getFullYear();
+
+      // Форматируем строку в нужном формате
+      return `${day}.${month}.${year}`;
+    },
+
     saveContent() {
       try {
         const textarea = document.getElementById("desc");
@@ -130,9 +142,60 @@ export default {
     },
     async load_artists() {
       try {
-        let response = await axios.get(`http://45.12.238.27:5000/get_artists`);
+        let response = await axios.get(`/get_artists`);
         console.log(response);
         this.artists = response.data;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    async load_info() {
+      try {
+        this.id = this.$route.query.id;
+        let response = await axios.get(`/get_picture/${this.id}`);
+        console.log(response);
+        this.title = response.data.title;
+        this.description = response.data.description;
+        this.price = response.data.price;
+        let artistID = response.data.artist_id;
+        this.status = response.data.status;
+        this.size = response.data.size;
+        this.artists.forEach((artist) => {
+          if (artist.id == artistID) {
+            this.artist = artist;
+          }
+        });
+        this.img_urls = response.data.img_urls;
+        let images = response.data.img_urls;
+        images.forEach((item) => {
+          this.imageUrlArray.push(`http://45.12.238.27:5000/images/${item}`);
+        });
+        this.unique_value = Boolean(response.data.unique_value);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    removeImg(name) {
+      try {
+        this.img_remove.push(name);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    async deleteArt() {
+      try {
+        let response = await axios.delete(`/picture/${this.id}`);
+        console.log(response);
+        this.message = response.data.message;
+        this.statusRes = response.status;
+        setTimeout(() => {
+          if (response.status == 200) {
+            this.$router.go(-1);
+          }
+          this.message = "";
+        }, 2500);
       } catch (err) {
         console.log(err);
       }
@@ -140,13 +203,14 @@ export default {
   },
   mounted() {
     this.load_artists();
+    this.load_info();
   },
 };
 </script>
 
 <template>
   <div class="wrapper">
-    <h1>Загрузка картины</h1>
+    <h1>Редактирование картины</h1>
     <div class="group">
       <input
         v-model="title"
@@ -227,15 +291,22 @@ export default {
       class="image-container"
     >
       <img :src="imageUrl" alt="Uploaded Image" />
+      <img
+        @click="removeImg(imageUrl)"
+        class="cross"
+        src="../assets/cross.png"
+        alt=""
+      />
     </div>
     <div class="wrap-btns" v-if="!message">
-      <button class="btn" @click="save()">Загрузить</button>
+      <button class="btn delete" @click="deleteArt()">Удалить</button>
+      <button class="btn" @click="save()">Сохранить</button>
     </div>
     <div
       class="msg"
       :class="{
-        success: this.message == 'Успешно',
-        error: this.message != 'Успешно',
+        success: this.statusRes == '200',
+        error: this.statusRes != '200',
       }"
       v-if="message"
     >
@@ -265,6 +336,7 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 20px;
 }
 
 .btn {
@@ -288,7 +360,7 @@ select {
 }
 
 textarea {
-  max-width: 500px;
+  max-width: 450px;
   max-height: 300px;
   min-height: 70px;
 }
@@ -339,6 +411,7 @@ label {
   color: #aa6a2a;
 }
 .image-container {
+  position: relative;
   margin: 0 auto;
   max-width: 400px;
   border-radius: 8px;
@@ -351,5 +424,16 @@ label {
   display: flex;
   align-items: center;
   gap: 7px;
+}
+
+.cross {
+  position: absolute;
+  top: 2%;
+  right: 2%;
+  cursor: pointer;
+}
+
+.delete {
+  background-color: #cf0032;
 }
 </style>

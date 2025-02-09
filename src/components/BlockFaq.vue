@@ -151,6 +151,7 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  transition: all 500ms ease;
 }
 
 .card {
@@ -161,6 +162,7 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  transition: all 500ms ease;
 }
 
 .card:hover {
@@ -199,6 +201,7 @@ export default {
   font-size: 1.2rem;
   line-height: 1.5rem;
   font-weight: 500;
+  transition: all 500ms ease;
 }
 
 .qst {
@@ -206,6 +209,7 @@ export default {
   font-size: 24px;
   line-height: 24px;
   color: #0f0f0f;
+  transition: all 500ms ease;
 }
 
 .active {
