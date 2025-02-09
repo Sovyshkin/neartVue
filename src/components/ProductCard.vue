@@ -90,6 +90,7 @@ export default {
         :class="{
           inStok: status == 'В наличии',
           nonStok: status == 'Нет в наличии',
+          one: status == 'Доступно под заказ',
         }"
       >
         {{ status }}
@@ -162,6 +163,7 @@ export default {
 }
 
 .one {
-  background-color: #f1dbb2;
+  background-color: #aa6a2a;
+  color: #fff;
 }
 </style>

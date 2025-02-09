@@ -159,6 +159,11 @@ export default {
     <div class="info">
       <h1>{{ title }}</h1>
       <div class="status">
+        <img
+          src="../assets/one.png"
+          v-if="status == 'Доступно под заказ'"
+          alt=""
+        />
         <img src="../assets/in-stock.png" v-if="status == 'В наличии'" alt="" />
         <img
           src="../assets/not-stock.png"
