@@ -35,7 +35,7 @@ export default {
     },
     async save() {
       try {
-        if (this.phone && this.username) {
+        if (this.first_name && this.last_name) {
           const formData = new FormData();
           formData.append("file", this.fileObjects[0]);
           formData.append("username", this.username);
