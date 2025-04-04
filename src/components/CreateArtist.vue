@@ -37,7 +37,9 @@ export default {
       try {
         if (this.first_name && this.last_name) {
           const formData = new FormData();
-          formData.append("file", this.fileObjects[0]);
+          if (this.fileObjects[0]) {
+            formData.append("file", this.fileObjects[0]);
+          }
           formData.append("username", this.username);
           formData.append("email", this.email);
           formData.append("description", this.description);
