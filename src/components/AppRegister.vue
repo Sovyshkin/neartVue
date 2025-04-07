@@ -80,7 +80,7 @@ export default {
       />
       <span class="group-value">Email</span>
     </div>
-    <button @click="login" v-if="!message" class="btn">Авторизоваться</button>
+    <button @click="log" v-if="!message" class="btn">Авторизоваться</button>
     <div
       class="msg"
       :class="{
