@@ -6,7 +6,7 @@ import router from "./router/router";
 import axios from "axios";
 // import { Carousel } from "vue-carousel";
 
-axios.defaults.baseURL = "http://45.12.238.27:5000/";
+axios.defaults.baseURL = "http://217.114.2.107:5000/";
 
 import "vuetify/styles";
 import { createVuetify } from "vuetify";
