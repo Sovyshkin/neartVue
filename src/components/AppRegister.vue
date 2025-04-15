@@ -10,6 +10,11 @@ export default {
       email: "",
       message: "",
       isLoading: false,
+      auth: false,
+      code: "",
+      codeFill: false,
+      id: '',
+      cart_id: ''
     };
   },
   methods: {
@@ -27,13 +32,45 @@ export default {
           });
           console.log(response);
           this.message = response.data.message;
-          this.id = response.data.id;
-          let cart_id = response.data.cart_id;
           if (this.message == "Успешно") {
-            localStorage.setItem("id", this.id);
-            localStorage.setItem("cart_id", cart_id);
+            // localStorage.setItem("id", this.id);
+            // localStorage.setItem("cart_id", cart_id);
+            this.auth = true
             setTimeout(() => {
               this.message = "";
+            }, 2500);
+          }
+          setTimeout(() => {
+            this.message = "";
+          }, 2500);
+        }
+      } catch (err) {
+        console.log(err);
+        this.message = err.response.data.detail
+        setTimeout(() => {
+            this.message = "";
+          }, 4500);
+      }
+    },
+
+    async verify() {
+      try {
+        console.log(this.email);
+        if (this.code) {
+          let response = await axios.post(`/code_input`, {
+            code: this.code,
+            email: this.email,
+          });
+          this.message = response.data.message;
+          this.id = response.data.id;
+          this.cart_id = response.data.cart_id;
+          if (this.id) {
+            localStorage.setItem("id", this.id);
+            localStorage.setItem("cart_id", this.cart_id);
+            setTimeout(() => {
+              this.message = "";
+              location.reload();
+              this.$emit("close", true);
             }, 2500);
           }
           setTimeout(() => {
@@ -57,7 +94,7 @@ export default {
 </script>
 <template>
   <LoadingSpinner v-if="isLoading" />
-  <div class="card">
+  <div class="card" v-if="!auth">
     <div class="cancel">
       <span class="title">Регистрация</span>
       <img @click="close" src="../assets/close.png" alt="" />
@@ -86,6 +123,41 @@ export default {
       :class="{
         success: this.message == 'Успешно',
         error: this.message != 'Успешно',
+      }"
+      v-if="message"
+    >
+      {{ message }}
+    </div>
+  </div>
+  <div class="card" v-else>
+    <div class="cancel">
+      <span class="title">Подтверждение</span>
+      <img @click="close" src="../assets/close.png" alt="" />
+    </div>
+    <div class="group">
+      <input
+        type="text"
+        name="code"
+        v-model="code"
+        placeholder="Введите код"
+        :class="{
+          nofillBorder: codeFill,
+        }"
+      />
+      <span
+        class="group-value"
+        :class="{
+          nofillText: codeFill,
+        }"
+        >Код из письма email</span
+      >
+    </div>
+    <button @click="verify" v-if="!message" class="btn">Авторизация</button>
+    <div
+      class="msg"
+      :class="{
+        success: this.status == '200',
+        error: this.status != '200',
       }"
       v-if="message"
     >
