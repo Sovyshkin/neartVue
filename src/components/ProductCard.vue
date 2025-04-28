@@ -74,7 +74,7 @@ export default {
       <v-carousel-item
         v-for="img in img_urls"
         :key="img"
-        :src="`http://45.12.238.27:5000/images/${img}`"
+        :src="`http://217.114.2.107:5000/images/${img}`"
         aspect-ratio="4 / 3"
         class="carousel-item rounded"
       ></v-carousel-item>

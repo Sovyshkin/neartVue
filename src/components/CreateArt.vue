@@ -84,7 +84,7 @@ export default {
 
           console.log(formData);
           let response = await axios.post(
-            "http://45.12.238.27:5000/add_picture",
+            "http://217.114.2.107:5000/add_picture",
             formData,
             {
               headers: {
@@ -130,7 +130,7 @@ export default {
     },
     async load_artists() {
       try {
-        let response = await axios.get(`http://45.12.238.27:5000/get_artists`);
+        let response = await axios.get(`http://217.114.2.107:5000/get_artists`);
         console.log(response);
         this.artists = response.data;
       } catch (err) {

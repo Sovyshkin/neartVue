@@ -75,7 +75,7 @@ export default {
       try {
         let images = [];
         this.imageUrlArray.forEach((item) => {
-          if (item.includes("http://45.12.238.27:5000/images/")) {
+          if (item.includes("http://217.114.2.107:5000/images/")) {
             images.push(item);
           }
         });
@@ -169,7 +169,7 @@ export default {
         this.img_urls = response.data.img_urls;
         let images = response.data.img_urls;
         images.forEach((item) => {
-          this.imageUrlArray.push(`http://45.12.238.27:5000/images/${item}`);
+          this.imageUrlArray.push(`http://217.114.2.107:5000/images/${item}`);
         });
         this.unique_value = Boolean(response.data.unique_value);
       } catch (err) {

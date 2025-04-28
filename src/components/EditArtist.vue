@@ -66,7 +66,7 @@ export default {
 
           console.log(formData);
           let response = await axios.post(
-            "http://45.12.238.27:5000/artist_add",
+            "http://217.114.2.107:5000/artist_add",
             formData,
             {
               headers: {
@@ -168,7 +168,7 @@ export default {
 
           console.log(formData);
           let response = await axios.post(
-            "http://45.12.238.27:5000/artist_update",
+            "http://217.114.2.107:5000/artist_update",
             formData,
             {
               headers: {
@@ -284,7 +284,7 @@ export default {
     </div>
 
     <div class="image-container" v-if="image_url && imageUrlArray.length == 0">
-      <img :src="`http://45.12.238.27:5000/images/${image_url}`" alt="" />
+      <img :src="`http://217.114.2.107:5000/images/${image_url}`" alt="" />
     </div>
 
     <div v-if="!isImageArray.includes(true)" class="file-container">
