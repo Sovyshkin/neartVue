@@ -83,7 +83,9 @@ export default {
         this.fileObjects.forEach((file) => {
           formData.append("files", file);
         });
-        formData.append("img_urls", this.img_remove);
+        this.imageUrlArray.forEach((url) => {
+          formData.append("img_urls", url.replace('http://217.114.2.107:5000/images/', ''));
+        });
         formData.append("artist_id", this.artist.id);
         formData.append("title", this.title);
         formData.append("description", this.description);
@@ -91,7 +93,7 @@ export default {
         formData.append("status", this.status);
         formData.append("size", this.size);
         formData.append("unique_value", Number(this.unique_value));
-        formData.append("id", this.id);
+        formData.append("picture_id", this.id);
         formData.append("created_at", this.formatDate());
 
         console.log(formData);
@@ -171,6 +173,7 @@ export default {
         images.forEach((item) => {
           this.imageUrlArray.push(`http://217.114.2.107:5000/images/${item}`);
         });
+        console.log(this.imageUrlArray);
         this.unique_value = Boolean(response.data.unique_value);
       } catch (err) {
         console.log(err);
@@ -178,7 +181,7 @@ export default {
     },
     removeImg(name) {
       try {
-        this.img_remove.push(name);
+        this.imageUrlArray.filter(item => item != name)
       } catch (err) {
         console.log(err);
       }
@@ -201,9 +204,9 @@ export default {
       }
     },
   },
-  mounted() {
-    this.load_artists();
-    this.load_info();
+  async mounted() {
+    await this.load_artists();
+    await this.load_info();
   },
 };
 </script>
