@@ -181,7 +181,7 @@ export default {
     },
     removeImg(name) {
       try {
-        this.imageUrlArray.filter(item => item != name)
+        this.imageUrlArray.filter((item) => item != name);
       } catch (err) {
         console.log(err);
       }

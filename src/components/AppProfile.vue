@@ -13,6 +13,12 @@ export default {
       admin: "",
       status: "",
       message: "",
+      telegram: '',
+      username: '',
+      first_name: '',
+      last_name: '',
+      address: "",
+      phone: '',
       isLoading: false,
     };
   },
@@ -43,6 +49,12 @@ export default {
           console.log(response);
           this.email = response.data.email;
           this.admin = response.data.is_admin;
+          this.username = response.data.username
+          this.first_name = response.data.first_name
+          this.last_name = response.data.last_name
+          this.phone = response.data.phone
+          this.address = response.data.address
+          this.telegram = response.data.telegram
         }
       } catch (err) {
         console.log(err);
@@ -55,29 +67,27 @@ export default {
 
     async updateProfile() {
       try {
+        const formData = new FormData()
+        formData.append('id', localStorage.getItem('id'))
+        formData.append('username', this.username)
+        formData.append('first_name', this.first_name)
+        formData.append('last_name', this.last_name)
+        formData.append('email', this.email)
+        formData.append('phone', this.phone)
+        formData.append('address', this.address)
+        formData.append('telegram', this.telegram)
         let response = await axios.post(
-          "/users/updateProfile",
+          "/customer_update",
+          formData,
           {
-            id: localStorage.getItem("id"),
-            firstname: this.firstname,
-            lastname: this.lastname,
-            profiletype: this.profiletype,
-            email: this.email,
-            phone: this.phone,
-            country: this.country,
-            address: this.address,
-            inn: this.inn,
-            telegram: this.telegram,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
         );
-
+          console.log(response);
         this.message = response.data.message;
-        if (this.message == "ok") {
+        if (this.message == "Успех") {
           this.message = this.$t("success");
         } else {
           this.message = "Ошибка";
@@ -136,18 +146,18 @@ export default {
       <div class="personal">
         <h3>{{ $t("personalData") }}</h3>
         <div class="personal_info">
-          <div class="group-avatar">
+          <!-- <div class="group-avatar">
             <img class="avatar" v-if="image" :src="image" alt="" />
             <img class="avatar" v-else src="../assets/profile.png" alt="" />
             <span class="change_avatar" @click="goChange(true)">{{
               $t("changePhoto")
             }}</span>
-          </div>
+          </div> -->
           <div class="group">
             <input
               type="text"
               name="login"
-              v-model="login"
+              v-model="username"
               placeholder="Придумайте себе имя пользователя"
             />
             <span class="group-value">Имя пользователя</span>
@@ -155,8 +165,8 @@ export default {
           <div class="group">
             <input
               type="text"
-              name="firstname"
-              v-model="firstname"
+              name="first_name"
+              v-model="first_name"
               :placeholder="$t('enterName')"
             />
             <span class="group-value">{{ $t("name") }}</span>
@@ -164,8 +174,8 @@ export default {
           <div class="group">
             <input
               type="text"
-              name="lastname"
-              v-model="lastname"
+              name="last_name"
+              v-model="last_name"
               :placeholder="$t('enterSurname')"
             />
             <span class="group-value">{{ $t("surname") }}</span>

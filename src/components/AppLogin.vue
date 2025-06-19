@@ -50,6 +50,7 @@ export default {
       } catch (err) {
         console.log(err);
         this.message = "Такого пользователя не существует";
+        this.status = 400
         setTimeout(() => {
           this.message = "";
         }, 2500);
@@ -83,7 +84,11 @@ export default {
           }, 2500);
         }
       } catch (err) {
-        console.log(err);
+        this.message = err.response.data.detail
+        this.status = 400
+        setTimeout(() => {
+            this.message = "";
+          }, 4000);
       }
     },
   },

@@ -43,7 +43,7 @@ export default {
 
     async load_orders() {
       try {
-        let response = await axios.get(`/get_orders`);
+        let response = await axios.get(`/orders`);
         console.log(response);
         this.cards = response.data || [];
       } catch (err) {

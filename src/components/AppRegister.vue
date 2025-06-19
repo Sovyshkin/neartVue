@@ -36,7 +36,7 @@ export default {
             // localStorage.setItem("id", this.id);
             // localStorage.setItem("cart_id", cart_id);
             this.auth = true
-            setTimeout(() => {
+            setTimeout(() => {  
               this.message = "";
             }, 2500);
           }
