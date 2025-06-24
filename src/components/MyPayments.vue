@@ -151,7 +151,7 @@ export default {
 
 .card {
   width: 100%;
-  border-radius: 20px;
+  
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -168,10 +168,10 @@ export default {
 
 .btn {
   width: 100%;
-  border-radius: 10px;
+  
   padding: 12px 17px;
   color: #fff;
-  background-color: #aa6a2a;
+  background-color: #E8336E;
 }
 
 .not_found {
@@ -217,7 +217,7 @@ export default {
 
 .payment {
   background-color: #fff;
-  border-radius: 20px;
+  
   padding: 24px 30px;
   border: none;
   display: flex;
@@ -249,7 +249,6 @@ export default {
 .wait {
   width: 8px;
   height: 8px;
-  border-radius: 13px;
   background-color: yellow;
 }
 
@@ -258,7 +257,7 @@ export default {
 }
 
 .offline {
-  background-color: #aa6a2a;
+  background-color: #E8336E;
 }
 
 .group-payment,
@@ -297,7 +296,7 @@ export default {
   .payment,
   .mypayment-header {
     padding: 10px;
-    border-radius: 10px;
+    
   }
 }
 

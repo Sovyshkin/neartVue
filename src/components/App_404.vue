@@ -46,7 +46,7 @@ export default {
 .err {
   font-size: 128px;
   font-weight: 700;
-  color: #aa6a2a;
+  color: #E8336E;
   line-height: 153.8px;
   opacity: 50%;
 }
@@ -60,9 +60,9 @@ export default {
 }
 
 .btn {
-  background-color: #aa6a2a;
+  background-color: #E8336E;
   color: #fff;
-  border-radius: 10px;
+  
   padding: 17px 24px;
   width: 224px;
   height: 50px;

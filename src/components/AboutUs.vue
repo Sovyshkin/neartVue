@@ -33,7 +33,7 @@ export default {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 1440 320"
-        fill="#aa6a2a"
+        fill="#E8336E"
         preserveAspectRatio="none"
       >
         <path
@@ -83,7 +83,7 @@ span {
 .title {
   width: 100%;
   height: 10vh;
-  background-color: #aa6a2a;
+  background-color: #E8336E;
   padding: 40px;
   color: #fff;
   display: flex;

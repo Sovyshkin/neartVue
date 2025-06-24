@@ -124,9 +124,9 @@ export default {
   </div>
 </template>
 <style>
-@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 #app {
-  font-family: "Manrope", sans-serif;
+  font-family: "Montserrat", sans-serif;
   width: 100%;
 }
 * {
@@ -142,6 +142,14 @@ export default {
 *::before,
 *::after {
   box-sizing: border-box;
+}
+
+@font-face {
+  font-family: 'Pizzicato';
+  src: url('@/assets/fonts/pizzicato.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap; /* Оптимизация загрузки */
 }
 
 h2 {
@@ -218,6 +226,7 @@ select {
   font-size: inherit;
   color: inherit;
   background-color: transparent;
+  border-radius: 0 !important;
 }
 
 input::-ms-clear {
@@ -276,7 +285,7 @@ button::-moz-focus-inner {
   font-size: 16px;
   line-height: 16px;
   color: #fff;
-  border-radius: 15px;
+  
   width: fit-content;
   margin: 0 auto;
 }

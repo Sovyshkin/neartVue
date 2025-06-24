@@ -269,8 +269,8 @@ h1 {
 
 .btn {
   padding: 15px 40px;
-  background-color: #aa6a2a;
-  border-radius: 10px;
+  background-color: #E8336E;
+  
   color: #fff;
   font-size: 15px;
   line-height: 18px;
@@ -280,8 +280,8 @@ input,
 textarea,
 select {
   width: 100%;
-  border: 1px solid #aa6a2a;
-  border-radius: 8px;
+  border: 1px solid black;
+  ;
   padding: 16px;
   background: none;
   outline: none;
@@ -312,7 +312,7 @@ select::placeholder {
   left: 12px;
   background-color: #f0f0f5;
   padding: 0 4px;
-  color: #aa6a2a;
+  color: #000;
   font-weight: 500;
   font-size: 12px;
   line-height: 13.66px;
@@ -328,20 +328,19 @@ input[type="file"] {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1.9px dashed #aa6a2a;
-  border-radius: 8px;
+  border: 1.9px dashed #000;
 }
 
 label {
   width: 100%;
   text-align: center;
   cursor: pointer;
-  color: #aa6a2a;
+  color: #000;
 }
 .image-container {
   margin: 0 auto;
   max-width: 400px;
-  border-radius: 8px;
+  ;
   overflow: hidden;
   display: flex;
   align-items: center;

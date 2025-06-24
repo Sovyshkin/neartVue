@@ -99,7 +99,7 @@ export default {
 };
 </script>
 <template>
-  <LoadingSpinner v-if="isLoading" />
+  <LoadingSpinner v-if="isLoading" :height="'small'"/>
   <div class="card" v-if="!auth">
     <div class="cancel">
       <span class="title">{{ $t("login") }}</span>
@@ -194,7 +194,7 @@ export default {
   flex-direction: column;
   gap: 25px;
   padding: 32px;
-  border-radius: 20px;
+  
   background-color: #fff;
   border: 1px solid #fff;
   min-width: 350px;
@@ -216,8 +216,8 @@ export default {
 
 .btn {
   width: 100%;
-  background-color: #aa6a2a;
-  border-radius: 10px;
+  background-color: #E8336E;
+  
   padding: 17px 24px;
   color: #fff;
   font-weight: 500;
@@ -241,7 +241,7 @@ a {
 }
 
 a {
-  color: #aa6a2a;
+  color: #E8336E;
 }
 
 .cancel {
@@ -259,7 +259,7 @@ a {
 input {
   width: 100%;
   border: 1px solid #e6e6e6;
-  border-radius: 8px;
+  ;
   padding: 16px;
 }
 
@@ -297,10 +297,10 @@ input::placeholder {
 }
 
 .nofillBorder {
-  border: 1px solid #aa6a2a;
+  border: 1px solid black;
 }
 
 .nofillText {
-  color: #aa6a2a;
+  color: #E8336E;
 }
 </style>

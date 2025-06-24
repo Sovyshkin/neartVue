@@ -1,8 +1,9 @@
 <script>
 import axios from "axios";
+import AppLogo from "./AppLogo.vue";
 export default {
   name: "AppFooter",
-  components: {},
+  components: {AppLogo},
   data() {
     return {
       lang: this.$i18n.locale,
@@ -74,10 +75,7 @@ export default {
 </script>
 <template>
   <div class="wrapper">
-    <div class="logo" @click="this.$router.push({ name: 'home' })">
-      <img class="mainLogo" src="../assets/logo.png" alt="" />
-      <img class="logoText" src="../assets/logoText.png" alt="" />
-    </div>
+    <AppLogo :color="'white'"/>
     <nav class="group">
       <li class="item-group" @click="goRoute('home')">Главная</li>
       <li @click="goRoute('arts')" class="item-group">Картины</li>
@@ -158,7 +156,7 @@ export default {
 
 .item-group::after {
   margin-top: 2px;
-  background-color: #aa6a2a; /* Цвет линии при наведении на нее курсора мыши */
+  background-color: #E8336E; /* Цвет линии при наведении на нее курсора мыши */
   display: block;
   content: "";
   height: 2px; /* Высота линии */
@@ -184,7 +182,7 @@ export default {
   position: absolute;
   padding: 3px 7px;
   transform: translateY(-60px);
-  border-radius: 5px;
+  ;
   background-color: #fff;
   box-shadow: 0 0 10px 0 #00000037;
   z-index: 3;

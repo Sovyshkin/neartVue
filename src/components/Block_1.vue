@@ -44,9 +44,8 @@ export default {
   font-weight: 500;
   font-size: 1rem;
   line-height: 1.5rem;
-  border-radius: 0.75rem;
   color: #fff;
-  background-color: #aa6a2a;
+  background-color: #E8336E;
   padding-bottom: 0.625rem;
   padding-top: 0.625rem;
   padding-left: 0.875rem;

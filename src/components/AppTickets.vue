@@ -110,15 +110,15 @@ export default {
 
 .ticket {
   padding: 20px;
-  border: 1px solid #aa6a2a;
-  border-radius: 20px;
+  border: 1px solid black;
+  
   cursor: pointer;
   transition: all 500ms ease;
 }
 
 .ticket:hover {
   transform: translateY(-3px);
-  background-color: #aa6a2a;
+  background-color: #E8336E;
   color: #fff;
 }
 

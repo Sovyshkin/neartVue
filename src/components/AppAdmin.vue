@@ -178,13 +178,13 @@ export default {
   gap: 10px;
 }
 .btn {
-  border-radius: 10px;
+  
   padding: 12px 17px;
   color: black;
   font-weight: 500;
   font-size: 16px;
   line-height: 16px;
-  border: 1px solid #aa6a2a;
+  border: 1px solid black;
   cursor: pointer;
   outline: none;
 }
@@ -201,12 +201,12 @@ export default {
 .user {
   width: 100%;
   padding: 20px;
-  border: 1px solid #aa6a2a;
+  border: 1px solid black;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  border-radius: 20px;
+  
   cursor: pointer;
   transition: all 500ms ease;
 }
@@ -253,7 +253,7 @@ h1 {
   gap: 15px;
   background-color: #fff;
   margin: 0 auto;
-  border-radius: 20px;
+  
   padding: 40px 20px 20px 20px;
 }
 .close {

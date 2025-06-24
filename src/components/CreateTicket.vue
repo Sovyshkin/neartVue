@@ -85,8 +85,8 @@ export default {
 input,
 textarea {
   width: 100%;
-  border: 1px solid #aa6a2a;
-  border-radius: 8px;
+  border: 1px solid black;
+  ;
   padding: 16px;
   outline: none;
 }
@@ -110,7 +110,7 @@ textarea::placeholder {
   background-color: #f0f0f5;
   left: 12px;
   padding: 0 4px;
-  color: #aa6a2a;
+  color: #E8336E;
   font-weight: 500;
   font-size: 10px;
   line-height: 13.66px;
@@ -118,8 +118,8 @@ textarea::placeholder {
 
 .btn {
   width: fit-content;
-  background-color: #aa6a2a;
-  border-radius: 10px;
+  background-color: #E8336E;
+  
   padding: 12px 17px;
   color: #fff;
   font-weight: 500;

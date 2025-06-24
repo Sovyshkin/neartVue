@@ -1,6 +1,6 @@
 <template>
-  <div class="wrapper">
-    <orbit-spinner :animation-duration="1200" :size="55" color="#aa6a2a" />
+  <div class="wrapper" :class="{'small': height == 'small'}">
+    <orbit-spinner :animation-duration="1200" :size="55" color="#E8336E" />
   </div>
 </template>
 
@@ -11,6 +11,9 @@ export default {
   components: {
     OrbitSpinner,
   },
+  props: {
+    height: String
+  }
 };
 </script>
 
@@ -20,5 +23,9 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.small {
+  height: 100% !important;
 }
 </style>

@@ -135,10 +135,10 @@ export default {
 }
 
 .btn {
-  background-color: #aa6a2a;
+  background-color: #E8336E;
   color: #fff;
-  border: 1px solid #aa6a2a;
-  border-radius: 10px;
+  border: 1px solid black;
+  
   padding: 12px 17px;
   width: 224px;
   height: 50px;
@@ -158,7 +158,7 @@ export default {
   cursor: pointer;
   width: 100%;
   padding: 30px;
-  border-radius: 20px;
+  
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -226,7 +226,7 @@ export default {
 
 .myTickets {
   background-color: transparent;
-  border: 1px solid #aa6a2a;
-  color: #aa6a2a;
+  border: 1px solid black;
+  color: #E8336E;
 }
 </style>

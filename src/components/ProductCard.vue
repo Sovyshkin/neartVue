@@ -115,6 +115,8 @@ export default {
   gap: 20px;
   padding: 5px 5px 20px 5px;
   background-color: #f1dbb2;
+  background-color: #CBCED0;
+  border-radius: 0;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
@@ -132,8 +134,8 @@ export default {
 
 .btn {
   width: 100%;
-  background-color: #aa6a2a;
-  border-radius: 10px;
+  background-color: #E8336E;
+  
   padding: 12px 17px;
   color: #fff;
   font-weight: 500;
@@ -147,14 +149,13 @@ export default {
 
 .status {
   padding: 3px 6px;
-  border-radius: 4px;
   font-size: 12px;
   line-height: 14px;
 }
 
 .inStok {
-  background-color: #3cca0d;
-  color: #fff;
+  background-color: #deffe9;
+  color: black;
 }
 
 .nonStok {
@@ -163,7 +164,7 @@ export default {
 }
 
 .one {
-  background-color: #aa6a2a;
+  background-color: #E8336E;
   color: #fff;
 }
 </style>

@@ -310,11 +310,10 @@ export default {
 
 .btn {
   width: 100%;
-  background-color: #aa6a2a;
+  background-color: #E8336E;
   font-size: 1.25rem;
   line-height: 1.5rem;
   padding: 0.625rem 0.875rem;
-  border-radius: 0.5rem;
   font-weight: 700;
   color: #fff;
 }

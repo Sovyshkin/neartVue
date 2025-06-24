@@ -416,7 +416,7 @@ export default {
 .wrap-card {
   padding: 20px;
   background-color: #fff;
-  border-radius: 20px;
+  
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -441,7 +441,7 @@ export default {
   width: 24px;
 }
 .drag_verify {
-  border-radius: 10px;
+  
   position: relative;
   background-color: #e8e8e8;
   text-align: center;
@@ -453,7 +453,7 @@ export default {
   top: 0px;
   left: 0px;
   cursor: move;
-  background-color: #aa6a2a !important;
+  background-color: #E8336E !important;
 }
 
 .drag_verify .dv_handler i {
@@ -567,7 +567,7 @@ export default {
 }
 
 img {
-  border-radius: 10px;
+  
 }
 
 .wrap-cancel {

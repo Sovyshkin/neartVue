@@ -107,13 +107,13 @@ export default {
 }
 
 .btn {
-  border-radius: 10px;
+  
   padding: 12px 17px;
   color: #fff;
   font-weight: 500;
   font-size: 16px;
   line-height: 16px;
-  background-color: #aa6a2a;
+  background-color: #E8336E;
   cursor: pointer;
   outline: none;
 }

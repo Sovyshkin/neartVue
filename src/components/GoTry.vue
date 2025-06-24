@@ -53,7 +53,7 @@ export default {
   flex-direction: column;
   gap: 25px;
   padding: 32px;
-  border-radius: 20px;
+  
   background-color: #fff;
   border: 1px solid #fff;
 }
@@ -74,8 +74,8 @@ export default {
 
 .btn {
   width: 100%;
-  background-color: #aa6a2a;
-  border-radius: 10px;
+  background-color: #E8336E;
+  
   padding: 17px 24px;
   color: #fff;
   font-weight: 500;
@@ -98,7 +98,7 @@ a {
 }
 
 a {
-  color: #aa6a2a;
+  color: #E8336E;
 }
 
 .cancel {

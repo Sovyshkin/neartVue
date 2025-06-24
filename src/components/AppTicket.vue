@@ -232,8 +232,8 @@ export default {
 input,
 textarea {
   width: 100%;
-  border: 1px solid #aa6a2a;
-  border-radius: 8px;
+  border: 1px solid black;
+  ;
   padding: 16px;
 }
 
@@ -247,8 +247,8 @@ textarea::placeholder {
 
 .btn {
   width: fit-content;
-  background-color: #aa6a2a;
-  border-radius: 10px;
+  background-color: #E8336E;
+  
   padding: 12px 17px;
   color: #fff;
   font-weight: 500;
@@ -260,7 +260,7 @@ textarea::placeholder {
   height: 60vh;
   padding: 20px;
   border: 1px solid #a5a5a5;
-  border-radius: 20px;
+  
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -284,7 +284,7 @@ textarea::placeholder {
 }
 
 .userMessage {
-  background-color: #aa6a2a;
+  background-color: #E8336E;
   color: #fff;
 }
 
@@ -292,8 +292,8 @@ textarea::placeholder {
   width: fit-content;
   min-width: 200px;
   padding: 10px;
-  border: 1px solid #aa6a2a;
-  border-radius: 20px;
+  border: 1px solid black;
+  
   position: relative;
 }
 
@@ -317,7 +317,7 @@ p {
 
 textarea {
   border: 1px solid #a5a5a5;
-  border-radius: 20px;
+  
   outline: none;
 }
 

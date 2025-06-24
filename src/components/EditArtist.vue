@@ -340,8 +340,8 @@ h1 {
 input,
 textarea {
   width: 100%;
-  border: 1px solid #aa6a2a;
-  border-radius: 8px;
+  border: 1px solid black;
+  ;
   padding: 16px;
 }
 
@@ -370,14 +370,14 @@ textarea::placeholder {
   left: 12px;
   background-color: #f0f0f5;
   padding: 0 4px;
-  color: #aa6a2a;
+  color: #000;
   font-weight: 500;
   font-size: 12px;
   line-height: 13.66px;
 }
 .btn {
-  background-color: #aa6a2a;
-  border-radius: 10px;
+  background-color: #E8336E;
+  
   padding: 12px 17px;
   color: #fff;
   font-weight: 500;
@@ -394,20 +394,20 @@ input[type="file"] {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1.9px dashed #aa6a2a;
-  border-radius: 8px;
+  border: 1.9px dashed #000;
+  ;
 }
 
 label {
   width: 100%;
   text-align: center;
   cursor: pointer;
-  color: #aa6a2a;
+  color: #000;
 }
 .image-container {
   margin: 0 auto;
   max-width: 400px;
-  border-radius: 8px;
+  ;
   overflow: hidden;
   display: flex;
   align-items: center;

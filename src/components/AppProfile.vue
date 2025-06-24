@@ -220,7 +220,7 @@ export default {
             />
             <span class="group-value">Telegram</span>
           </div>
-          <button v-if="!this.message" class="btn" @click="updateProfile">
+          <button v-if="!this.message" class="btn save" @click="updateProfile">
             {{ $t("refreshInfo") }}
           </button>
           <div
@@ -278,7 +278,7 @@ export default {
 .connect_info,
 .open_info,
 .confirmation_info {
-  border-radius: 20px;
+  
   padding: 30px;
   display: flex;
   flex-direction: column;
@@ -292,7 +292,7 @@ export default {
 .connect_info button,
 .open_info button,
 .confirmation_info button {
-  background-color: #aa6a2a;
+  background-color: #7dc495;
   color: #fff;
 }
 
@@ -300,7 +300,7 @@ input,
 select {
   width: 100%;
   border: 1px solid #e6e6e6;
-  border-radius: 8px;
+  ;
   padding: 16px;
 }
 
@@ -332,7 +332,7 @@ input::placeholder {
   line-height: 13.66px;
 }
 .btn {
-  border-radius: 10px;
+  
   background-color: #fff;
   padding: 14.5px 24px;
   box-shadow: none;
@@ -343,7 +343,7 @@ input::placeholder {
 }
 
 .active {
-  background-color: #aa6a2a;
+  background-color: #E8336E;
   color: #fff;
 }
 
@@ -364,7 +364,7 @@ h3 {
   font-size: 16px;
   line-height: 16px;
   color: #fff;
-  border-radius: 15px;
+  
   width: fit-content;
   margin: 0 auto;
 }
@@ -374,13 +374,13 @@ h3 {
 }
 
 .error {
-  background-color: #aa6a2a;
+  background-color: #E8336E;
 }
 
 .qr {
   width: 100%;
   background-color: #fff;
-  border-radius: 20px;
+  
   padding: 20px;
   display: flex;
   align-items: center;
@@ -407,7 +407,7 @@ h3 {
 .avatar {
   width: 100px;
   height: 100px;
-  border-radius: 100%;
+  
   object-fit: cover;
 }
 
@@ -415,7 +415,7 @@ h3 {
   font-weight: 400;
   font-size: 14px;
   line-height: 14px;
-  color: #aa6a2a;
+  color: #E8336E;
   text-decoration: underline;
   cursor: pointer;
 }
@@ -434,7 +434,7 @@ h3 {
 .enabled {
   background-color: #fff;
   padding: 20px 10px;
-  border-radius: 20px;
+  
   font-size: 18px;
   line-height: 18px;
   font-weight: 500;

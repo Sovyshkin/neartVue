@@ -1,9 +1,10 @@
 <script>
 import AppLogin from "./AppLogin.vue";
+import AppLogo from "./AppLogo.vue";
 import AppRegister from "./AppRegister.vue";
 export default {
   name: "AppHeader",
-  components: { AppLogin, AppRegister },
+  components: { AppLogin, AppRegister, AppLogo },
   data() {
     return {
       showLogin: false,
@@ -52,10 +53,7 @@ export default {
 </script>
 <template>
   <div class="wrapper">
-    <div class="logo" @click="this.$router.push({ name: 'home' })">
-      <img class="mainLogo" src="../assets/logo.png" alt="" />
-      <img class="logoText" src="../assets/logoText.png" alt="" />
-    </div>
+    <AppLogo/>
     <nav class="group-nav adap">
       <li class="item-nav" @click="goRoute('home')">Главная</li>
       <li @click="goRoute('arts')" class="item-nav">Картины</li>
@@ -151,7 +149,7 @@ export default {
 .active-billings {
   width: 100%;
   padding: 5px 10px;
-  background-color: #aa6a2a;
+  background-color: #E8336E;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -159,23 +157,6 @@ export default {
 
 .active-billings span {
   color: #fff;
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  height: 60px;
-  cursor: pointer;
-}
-
-.mainLogo {
-  width: 70px;
-}
-
-.logoText {
-  width: 180px;
-  padding-top: 10px;
 }
 
 .group-nav {
@@ -200,9 +181,9 @@ export default {
 }
 
 .login {
-  background-color: #aa6a2a;
+  background-color: #E8336E;
   padding: 14px 24px;
-  border-radius: 5px;
+  ;
   color: #fff;
   font-weight: 600;
   font-size: 16px;
@@ -216,7 +197,7 @@ export default {
 
 .item-nav::after {
   margin-top: 2px;
-  background-color: #aa6a2a; /* Цвет линии при наведении на нее курсора мыши */
+  background-color: #E8336E; /* Цвет линии при наведении на нее курсора мыши */
   display: block;
   content: "";
   height: 2px; /* Высота линии */
@@ -245,7 +226,7 @@ export default {
 }
 
 .avatar {
-  border-radius: 45px;
+  
   overflow: hidden;
   cursor: pointer;
 }
@@ -291,7 +272,7 @@ export default {
   top: 40px;
   left: -110px;
   padding: 10px;
-  border-radius: 10px;
+  
   display: flex;
   flex-direction: column;
   gap: 7px;

@@ -64,12 +64,12 @@ h2 {
   align-items: center;
   gap: 10px;
   padding: 20px;
-  border-radius: 20px;
+  
   background-color: #fff;
 }
 
 .title {
-  color: #aa6a2a;
+  color: #E8336E;
   text-align: center;
   font-weight: 600;
   font-size: 18px;
