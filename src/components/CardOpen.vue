@@ -3,9 +3,15 @@ import axios from "axios";
 import LoadingSpinner from "./LoadingSpinner.vue";
 import AppLogin from "./AppLogin.vue";
 import AppRegister from "./AppRegister.vue";
+import { useDisplay } from 'vuetify'
+
 export default {
   name: "CardOpen",
   components: { LoadingSpinner, AppLogin, AppRegister },
+  setup() {
+    const { mobile } = useDisplay()
+    return { mobile }
+  },
   data() {
     return {
       items: [],
@@ -24,6 +30,8 @@ export default {
       cart_id: localStorage.getItem("cart_id"),
       showRegister: false,
       showLogin: false,
+      dialog: false,
+      fullscreenImage: "",
     };
   },
   methods: {
@@ -132,12 +140,20 @@ export default {
         this.showRegister = true;
       }, 300);
     },
+    openFullscreen(img) {
+      this.fullscreenImage = `http://217.114.2.107:5000/images/${img}`
+      this.dialog = true
+    },
+    closeFullscreen() {
+      this.dialog = false
+    }
   },
   async mounted() {
     this.load_pic();
   },
 };
 </script>
+
 <template>
   <LoadingSpinner v-if="isLoading" />
   <section class="product-details" v-else>
@@ -154,6 +170,7 @@ export default {
         :src="`http://217.114.2.107:5000/images/${img}`"
         class="carousel-item"
         aspect-ratio="4 / 3"
+        @click="openFullscreen(img)"
       ></v-carousel-item>
     </v-carousel>
     <div class="info">
@@ -196,6 +213,29 @@ export default {
       <span class="desc">{{ description }}</span>
     </div>
   </section>
+
+  <!-- Диалог для полноэкранного просмотра -->
+  <v-dialog
+    v-model="dialog"
+    fullscreen
+    transition="dialog-bottom-transition"
+    :scrim="false"
+  >
+    <v-card color="black">
+      <v-toolbar dark color="black">
+        <v-btn icon dark @click="closeFullscreen">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </v-toolbar>
+      <v-img
+        :src="fullscreenImage"
+        contain
+        class="fullscreen-image"
+        @click="closeFullscreen"
+      ></v-img>
+    </v-card>
+  </v-dialog>
+
   <v-dialog max-width="500" v-model="showLogin">
     <AppLogin @close="showLogin = false" @goReg="handleLog" />
   </v-dialog>
@@ -213,6 +253,7 @@ export default {
     {{ message }}
   </div>
 </template>
+
 <style scoped>
 .product-details {
   width: 100%;
@@ -224,6 +265,11 @@ export default {
 
 .carousel {
   width: 70%;
+  cursor: pointer;
+}
+
+.carousel-item {
+  cursor: zoom-in;
 }
 
 .info {
@@ -295,6 +341,12 @@ export default {
 
 .size-text {
   color: #717c8d;
+}
+
+.fullscreen-image {
+  height: calc(100vh - 64px);
+  width: 100%;
+  cursor: zoom-out;
 }
 
 @media (max-width: 968px) {

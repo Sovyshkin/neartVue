@@ -71,47 +71,6 @@ export default {
       return `${(size | 0).toString()} ${units[i]}`;
     },
 
-    async save() {
-      try {
-        let images = [];
-        this.imageUrlArray.forEach((item) => {
-          if (item.includes("http://217.114.2.107:5000/images/")) {
-            images.push(item);
-          }
-        });
-        const formData = new FormData();
-        this.fileObjects.forEach((file) => {
-          formData.append("files", file);
-        });
-        this.imageUrlArray.forEach((url) => {
-          formData.append("img_urls", url.replace('http://217.114.2.107:5000/images/', ''));
-        });
-        formData.append("artist_id", this.artist.id);
-        formData.append("title", this.title);
-        formData.append("description", this.description);
-        formData.append("price", this.price);
-        formData.append("status", this.status);
-        formData.append("size", this.size);
-        formData.append("unique_value", Number(this.unique_value));
-        formData.append("picture_id", this.id);
-        formData.append("created_at", this.formatDate());
-
-        console.log(formData);
-        let response = await axios.post("/update_picture", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        console.log(response);
-        this.message = response.data.message;
-        this.statusRes = response.status;
-        setTimeout(() => {
-          this.message = "";
-        }, 2500);
-      } catch (err) {
-        console.log(err);
-      }
-    },
     formatDate() {
       const date = new Date();
 
@@ -168,22 +127,78 @@ export default {
             this.artist = artist;
           }
         });
+        // Сохраняем оригинальные URL в img_urls
         this.img_urls = response.data.img_urls;
-        let images = response.data.img_urls;
-        images.forEach((item) => {
-          this.imageUrlArray.push(`http://217.114.2.107:5000/images/${item}`);
-        });
-        console.log(this.imageUrlArray);
+        // Отображаем изображения
+        this.imageUrlArray = response.data.img_urls.map(
+          (item) => `http://217.114.2.107:5000/images/${item}`
+        );
         this.unique_value = Boolean(response.data.unique_value);
       } catch (err) {
         console.log(err);
       }
     },
-    removeImg(name) {
+
+    removeImg(url) {
       try {
-        this.imageUrlArray.filter((item) => item != name);
+        // Удаляем из массива для отображения
+        this.imageUrlArray = this.imageUrlArray.filter((item) => item !== url);
+
+        // Удаляем соответствующий URL из img_urls
+        const filename = url.replace("http://217.114.2.107:5000/images/", "");
+        this.img_urls = this.img_urls.filter((item) => item !== filename);
       } catch (err) {
-        console.log(err);
+        console.error("Ошибка при удалении изображения:", err);
+      }
+    },
+
+    async save() {
+      try {
+        const formData = new FormData();
+
+        // Добавляем новые файлы
+        this.fileObjects.forEach((file) => {
+          formData.append("files", file);
+        });
+
+        // Добавляем URL существующих изображений, которые нужно сохранить
+        if (this.img_urls.length > 0) {
+          formData.append("img_urls", this.img_urls.join(","));
+        }
+
+        // Остальные поля остаются без изменений
+        formData.append("artist_id", this.artist.id);
+        formData.append("title", this.title);
+        formData.append("description", this.description);
+        formData.append("price", this.price);
+        formData.append("status", this.status);
+        formData.append("size", this.size);
+        formData.append("unique_value", this.unique_value ? 1 : 0);
+        formData.append("picture_id", this.id);
+        formData.append("created_at", new Date().toISOString());
+
+        console.log([...formData.entries()]);
+
+        let response = await axios.post("/update_picture", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        this.message = response.data.message;
+        this.statusRes = response.status;
+
+        setTimeout(() => {
+          this.message = "";
+        }, 2500);
+      } catch (err) {
+        console.error("Ошибка при сохранении:", err);
+        this.message = "Произошла ошибка при сохранении";
+        this.statusRes = "error";
+        setTimeout(() => {
+          this.message = ''
+          this.statusRes = ''
+        }, 4000)
       }
     },
 
