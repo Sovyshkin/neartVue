@@ -116,6 +116,7 @@ export default {
   padding: 5px 5px 20px 5px;
   background-color: #f1dbb2;
   background-color: #CBCED0;
+  background-color: #fff;
   border-radius: 0;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
