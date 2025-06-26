@@ -116,8 +116,9 @@ export default {
         this.id = this.$route.query.id;
         let response = await axios.get(`/get_picture/${this.id}`);
         console.log(response);
+        
         this.title = response.data.title;
-        this.description = response.data.description;
+        this.description = this.htmlToText(response.data.description);
         this.price = response.data.price;
         let artistID = response.data.artist_id;
         this.status = response.data.status;
@@ -154,6 +155,7 @@ export default {
 
     async save() {
       try {
+        this.description = this.saveContent(this.description);
         const formData = new FormData();
 
         // Добавляем новые файлы
@@ -196,9 +198,9 @@ export default {
         this.message = "Произошла ошибка при сохранении";
         this.statusRes = "error";
         setTimeout(() => {
-          this.message = ''
-          this.statusRes = ''
-        }, 4000)
+          this.message = "";
+          this.statusRes = "";
+        }, 4000);
       }
     },
 
@@ -217,6 +219,16 @@ export default {
       } catch (err) {
         console.log(err);
       }
+    },
+
+    htmlToText(html) {
+      if (!html) return "";
+      return html
+        .replace(/<br\s*\/?>/gi, "\n") // Заменяем <br> на перенос строки
+        .replace(/<\/?pre>/gi, "") // Удаляем теги <pre>
+        .replace(/&lt;/g, "<") // Восстанавливаем <
+        .replace(/&gt;/g, ">") // Восстанавливаем >
+        .replace(/&amp;/g, "&"); // Восстанавливаем &
     },
   },
   async mounted() {
@@ -359,8 +371,8 @@ h1 {
 
 .btn {
   padding: 15px 40px;
-  background-color: #E8336E;
-  
+  background-color: #e8336e;
+
   color: #fff;
   font-size: 15px;
   line-height: 18px;
@@ -371,7 +383,6 @@ textarea,
 select {
   width: 100%;
   border: 1px solid black;
-  ;
   padding: 16px;
   background: none;
   outline: none;
@@ -419,7 +430,6 @@ input[type="file"] {
   align-items: center;
   justify-content: center;
   border: 1.9px dashed #000;
-  ;
 }
 
 label {
@@ -432,7 +442,6 @@ label {
   position: relative;
   margin: 0 auto;
   max-width: 400px;
-  ;
   overflow: hidden;
   display: flex;
   align-items: center;

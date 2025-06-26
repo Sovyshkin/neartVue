@@ -70,6 +70,7 @@ export default {
     async save() {
       try {
         if (this.fileObjects.length > 0) {
+          this.description = this.saveContent(this.description)
           const formData = new FormData();
           this.fileObjects.forEach((file) => {
             formData.append("files", file);

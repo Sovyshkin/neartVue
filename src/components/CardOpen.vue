@@ -32,6 +32,9 @@ export default {
       showLogin: false,
       dialog: false,
       fullscreenImage: "",
+      currentIndex: 0,
+      isHovered: false,
+      interval: null
     };
   },
   methods: {
@@ -51,17 +54,47 @@ export default {
         console.log(response);
         this.title = response.data.title;
         this.description = response.data.description;
+        console.log(this.description);
         this.price = response.data.price;
         this.is_favorite = response.data.is_favorite;
         this.img_urls = response.data.img_urls;
         this.size = response.data.size;
         this.status = response.data.status;
+        
+        // Запускаем автопереключение после загрузки изображений
+        if (this.img_urls?.length > 1) {
+          this.startInterval();
+        }
       } catch (err) {
         console.log(err);
       } finally {
         this.isLoading = false;
       }
     },
+    
+    nextSlide() {
+      this.currentIndex = (this.currentIndex + 1) % this.img_urls.length;
+      this.resetInterval();
+    },
+    
+    prevSlide() {
+      this.currentIndex = (this.currentIndex - 1 + this.img_urls.length) % this.img_urls.length;
+      this.resetInterval();
+    },
+    
+    resetInterval() {
+      clearInterval(this.interval);
+      this.startInterval();
+    },
+    
+    startInterval() {
+      this.interval = setInterval(() => {
+        if (!this.isHovered) {
+          this.nextSlide();
+        }
+      }, 3000);
+    },
+
     async addCart() {
       try {
         this.cart_id = localStorage.getItem("cart_id");
@@ -112,6 +145,7 @@ export default {
         this.isLoading = false;
       }
     },
+    
     async removeFav() {
       try {
         this.isLoading = true;
@@ -127,6 +161,7 @@ export default {
         this.isLoading = false;
       }
     },
+    
     openDialog(type) {
       if (type == "login") {
         this.showLogin = true;
@@ -134,20 +169,28 @@ export default {
         this.showRegister = true;
       }
     },
+    
     handleLog() {
       this.showLogin = false;
       setTimeout(() => {
         this.showRegister = true;
       }, 300);
     },
+    
     openFullscreen(img) {
       this.fullscreenImage = `http://217.114.2.107:5000/images/${img}`
       this.dialog = true
     },
+    
     closeFullscreen() {
       this.dialog = false
     }
   },
+  
+  beforeUnmount() {
+    clearInterval(this.interval);
+  },
+  
   async mounted() {
     this.load_pic();
   },
@@ -157,22 +200,50 @@ export default {
 <template>
   <LoadingSpinner v-if="isLoading" />
   <section class="product-details" v-else>
-    <v-carousel
-      show-arrows="hover"
-      cycle
-      hide-delimiter-background
-      class="carousel"
-      height="auto"
+    <div 
+      class="carousel-container"
+      v-if="img_urls?.length"
+      @mouseenter="isHovered = true"
+      @mouseleave="isHovered = false"
     >
-      <v-carousel-item
-        v-for="img in img_urls"
-        :key="img"
-        :src="`http://217.114.2.107:5000/images/${img}`"
-        class="carousel-item"
-        aspect-ratio="4 / 3"
-        @click="openFullscreen(img)"
-      ></v-carousel-item>
-    </v-carousel>
+      <div class="carousel-slide">
+        <img 
+          :src="`http://217.114.2.107:5000/images/${img_urls[currentIndex]}`" 
+          alt="Product image"
+          class="carousel-image"
+          @click="openFullscreen(img_urls[currentIndex])"
+        />
+        
+        <!-- Стрелки навигации -->
+        <button 
+          v-if="img_urls.length > 1"
+          class="carousel-arrow prev"
+          @click.stop="prevSlide"
+          :style="{ opacity: isHovered ? 1 : 0 }"
+        >
+          &lt;
+        </button>
+        <button 
+          v-if="img_urls.length > 1"
+          class="carousel-arrow next"
+          @click.stop="nextSlide"
+          :style="{ opacity: isHovered ? 1 : 0 }"
+        >
+          &gt;
+        </button>
+      </div>
+      
+      <!-- Индикаторы (точки) -->
+      <div class="carousel-indicators" v-if="img_urls.length > 1">
+        <span 
+          v-for="(img, index) in img_urls" 
+          :key="index"
+          :class="{ active: currentIndex === index }"
+          @click.stop="currentIndex = index"
+        ></span>
+      </div>
+    </div>
+    
     <div class="info">
       <h1>{{ title }}</h1>
       <div class="status">
@@ -210,7 +281,7 @@ export default {
         />
       </div>
       <button class="btn" @click="addCart">Добавить в корзину</button>
-      <span class="desc">{{ description }}</span>
+      <span class="desc" v-html="description"></span>
     </div>
   </section>
 
@@ -261,15 +332,6 @@ export default {
   justify-content: center;
   gap: 20px;
   padding: 20px 40px;
-}
-
-.carousel {
-  width: 70%;
-  cursor: pointer;
-}
-
-.carousel-item {
-  cursor: zoom-in;
 }
 
 .info {
@@ -348,13 +410,100 @@ export default {
   cursor: zoom-out;
 }
 
+/* Кастомная карусель */
+.carousel-container {
+  position: relative;
+  width: 70%;
+  height: auto;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+}
+
+.carousel-slide {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.carousel-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.5s ease;
+  cursor: zoom-in;
+}
+
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  background-color: rgba(255, 255, 255, 0.95);
+  border: none;
+  border-radius: 50%;
+  color: #E8336E;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+  transition: all 0.3s ease;
+  opacity: 0;
+}
+
+.carousel-arrow:hover {
+  background-color: white;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.prev {
+  left: 15px;
+}
+
+.next {
+  right: 15px;
+}
+
+.carousel-indicators {
+  position: absolute;
+  bottom: 15px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  z-index: 10;
+}
+
+.carousel-indicators span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.carousel-indicators span.active {
+  background-color: #E8336E;
+  transform: scale(1.2);
+}
+
+.carousel-indicators span:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
 @media (max-width: 968px) {
   .product-details {
     flex-direction: column;
   }
 
   .info,
-  .carousel {
+  .carousel-container {
     width: 100%;
   }
 }
