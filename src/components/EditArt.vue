@@ -132,7 +132,7 @@ export default {
         this.img_urls = response.data.img_urls;
         // Отображаем изображения
         this.imageUrlArray = response.data.img_urls.map(
-          (item) => `http://217.114.2.107:5000/images/${item}`
+          (item) => `https://217.114.2.107:5000/images/${item}`
         );
         this.unique_value = Boolean(response.data.unique_value);
       } catch (err) {
@@ -146,7 +146,7 @@ export default {
         this.imageUrlArray = this.imageUrlArray.filter((item) => item !== url);
 
         // Удаляем соответствующий URL из img_urls
-        const filename = url.replace("http://217.114.2.107:5000/images/", "");
+        const filename = url.replace("https://217.114.2.107:5000/images/", "");
         this.img_urls = this.img_urls.filter((item) => item !== filename);
       } catch (err) {
         console.error("Ошибка при удалении изображения:", err);

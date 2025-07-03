@@ -106,7 +106,7 @@ export default {
     >
       <div class="carousel-slide">
         <img 
-          :src="`http://217.114.2.107:5000/images/${img_urls[currentIndex]}`" 
+          :src="`https://217.114.2.107:5000/images/${img_urls[currentIndex]}`" 
           alt="Product image"
           class="carousel-image"
         />

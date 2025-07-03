@@ -178,7 +178,7 @@ export default {
     },
     
     openFullscreen(img) {
-      this.fullscreenImage = `http://217.114.2.107:5000/images/${img}`
+      this.fullscreenImage = `https://217.114.2.107:5000/images/${img}`
       this.dialog = true
     },
     
@@ -208,7 +208,7 @@ export default {
     >
       <div class="carousel-slide">
         <img 
-          :src="`http://217.114.2.107:5000/images/${img_urls[currentIndex]}`" 
+          :src="`https://217.114.2.107:5000/images/${img_urls[currentIndex]}`" 
           alt="Product image"
           class="carousel-image"
           @click="openFullscreen(img_urls[currentIndex])"
