@@ -1,0 +1,41 @@
+{
+  "kind": "collectionType",
+  "collectionName": "tickets",
+  "info": {
+    "singularName": "ticket",
+    "pluralName": "tickets",
+    "displayName": "Ticket",
+    "description": "Support tickets from users"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "text": {
+      "type": "text",
+      "required": true
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": ["Открыт", "В работе", "Закрыт"],
+      "default": "Открыт",
+      "required": true
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "responses": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::ticket-response.ticket-response",
+      "mappedBy": "ticket"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_order_order_items",
+  "info": {
+    "displayName": "Order Item",
+    "description": "Item in an order"
+  },
+  "options": {},
+  "attributes": {
+    "artwork": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::artwork.artwork"
+    },
+    "quantity": {
+      "type": "integer",
+      "default": 1,
+      "min": 1,
+      "required": true
+    },
+    "price": {
+      "type": "decimal",
+      "required": true
+    }
+  }
+}

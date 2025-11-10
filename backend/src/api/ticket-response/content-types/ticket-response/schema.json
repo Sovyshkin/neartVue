@@ -1,0 +1,35 @@
+{
+  "kind": "collectionType",
+  "collectionName": "ticket_responses",
+  "info": {
+    "singularName": "ticket-response",
+    "pluralName": "ticket-responses",
+    "displayName": "Ticket Response",
+    "description": "Responses to support tickets"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "text": {
+      "type": "text",
+      "required": true
+    },
+    "is_admin": {
+      "type": "boolean",
+      "default": false
+    },
+    "ticket": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::ticket.ticket",
+      "inversedBy": "responses"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    }
+  }
+}

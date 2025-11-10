@@ -1,0 +1,107 @@
+{
+  "kind": "collectionType",
+  "collectionName": "orders",
+  "info": {
+    "singularName": "order",
+    "pluralName": "orders",
+    "displayName": "Заказ",
+    "description": "Customer orders for artworks"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "fullName": {
+      "type": "string",
+      "required": true
+    },
+    "phone": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "email",
+      "required": true
+    },
+    "city": {
+      "type": "string",
+      "required": true
+    },
+    "address": {
+      "type": "text",
+      "required": true
+    },
+    "comment": {
+      "type": "text"
+    },
+    "totalAmount": {
+      "type": "decimal",
+      "required": true
+    },
+    "status": {
+      "type": "enumeration",
+      "required": true,
+      "default": "pending",
+      "enum": [
+        "pending",
+        "paid",
+        "shipped",
+        "delivered",
+        "cancelled"
+      ]
+    },
+    "paymentStatus": {
+      "type": "enumeration",
+      "required": true,
+      "default": "pending",
+      "enum": [
+        "pending",
+        "paid",
+        "failed"
+      ]
+    },
+    "paymentId": {
+      "type": "string"
+    },
+    "paymentMethod": {
+      "type": "string",
+      "default": "tinkoff"
+    },
+    "cdekOrderUuid": {
+      "type": "string"
+    },
+    "cdekTrackNumber": {
+      "type": "string"
+    },
+    "deliveryMethod": {
+      "type": "enumeration",
+      "enum": [
+        "courier",
+        "pickup",
+        "cdek_pvz",
+        "cdek_courier"
+      ],
+      "default": "courier"
+    },
+    "deliveryCost": {
+      "type": "decimal"
+    },
+    "cdekPvzCode": {
+      "type": "string"
+    },
+    "cdekPvzAddress": {
+      "type": "text"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "items": {
+      "type": "component",
+      "repeatable": true,
+      "component": "order.order-item"
+    }
+  }
+}

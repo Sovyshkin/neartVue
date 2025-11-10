@@ -1,0 +1,44 @@
+{
+  "kind": "collectionType",
+  "collectionName": "payments",
+  "info": {
+    "singularName": "payment",
+    "pluralName": "payments",
+    "displayName": "Payment",
+    "description": "Payment records for orders"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "amount": {
+      "type": "decimal",
+      "required": true
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "Pending",
+        "Completed",
+        "Failed",
+        "Refunded"
+      ],
+      "default": "Pending",
+      "required": true
+    },
+    "payment_method": {
+      "type": "string",
+      "required": true
+    },
+    "transaction_id": {
+      "type": "string",
+      "unique": true
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    }
+  }
+}
