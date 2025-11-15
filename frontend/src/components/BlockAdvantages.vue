@@ -115,6 +115,7 @@ export default {
 }
 
 .container {
+  max-width: 1600px;
   width: 100%;
   margin: 0 auto;
   padding: 0 60px;
@@ -155,8 +156,11 @@ export default {
 /* Сетка преимуществ */
 .advantages-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 32px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 /* Карточка преимущества */
@@ -175,7 +179,8 @@ export default {
 .card-inner {
   background: white;
   border-radius: 24px;
-  padding: 40px 32px;
+  padding: 48px 36px;
+  min-height: 320px;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -259,10 +264,11 @@ export default {
 }
 
 .advantage-title {
-  font-size: 1.5rem;
+  font-size: 1.375rem;
   font-weight: 700;
   color: #1a202c;
   margin: 0;
+  line-height: 1.3;
   transition: color 0.3s ease;
 }
 
@@ -271,10 +277,10 @@ export default {
 }
 
 .advantage-description {
-  font-size: 16px;
+  font-size: 1rem;
   color: #64748b;
   margin: 0;
-  line-height: 1.6;
+  line-height: 1.7;
   transition: color 0.3s ease;
 }
 
@@ -327,7 +333,7 @@ export default {
 /* Extra large desktop (1920px and up) */
 @media (min-width: 1920px) {
   .container {
-    max-width: 1800px;
+    max-width: 1920px;
     padding: 0 100px;
   }
   
@@ -350,11 +356,13 @@ export default {
   
   .advantages-grid {
     grid-template-columns: repeat(4, 1fr);
-    gap: 50px;
+    gap: 60px;
+    max-width: 1600px;
   }
   
   .card-inner {
-    padding: 50px 40px;
+    padding: 60px 48px;
+    min-height: 380px;
   }
   
   .advantage-icon {
@@ -368,18 +376,20 @@ export default {
   }
   
   .advantage-title {
-    font-size: 1.75rem;
+    font-size: 1.625rem;
+    line-height: 1.3;
   }
   
   .advantage-description {
     font-size: 1.125rem;
+    line-height: 1.7;
   }
 }
 
 /* Large desktop (1440px to 1919px) */
 @media (min-width: 1440px) and (max-width: 1919px) {
   .container {
-    max-width: 1400px;
+    max-width: 1600px;
     padding: 0 80px;
   }
   
@@ -402,11 +412,13 @@ export default {
   
   .advantages-grid {
     grid-template-columns: repeat(4, 1fr);
-    gap: 40px;
+    gap: 50px;
+    max-width: 1500px;
   }
   
   .card-inner {
-    padding: 40px 32px;
+    padding: 48px 40px;
+    min-height: 340px;
   }
   
   .advantage-icon {
@@ -421,16 +433,19 @@ export default {
   
   .advantage-title {
     font-size: 1.5rem;
+    line-height: 1.3;
   }
   
   .advantage-description {
     font-size: 1.0625rem;
+    line-height: 1.7;
   }
 }
 
 /* Desktop (1025px to 1439px) */
 @media (min-width: 1025px) and (max-width: 1439px) {
   .container {
+    max-width: 1400px;
     padding: 0 60px;
   }
   
@@ -441,6 +456,7 @@ export default {
   .advantages-grid {
     grid-template-columns: repeat(4, 1fr);
     gap: 36px;
+    max-width: 1300px;
   }
   
   .section-title {
@@ -453,19 +469,23 @@ export default {
   }
   
   .card-inner {
-    padding: 36px 28px;
+    padding: 42px 32px;
+    min-height: 320px;
   }
   
   .advantage-title {
-    font-size: 1.375rem;
+    font-size: 1.25rem;
+    line-height: 1.3;
   }
   
   .advantage-description {
-    font-size: 1rem;
+    font-size: 0.9375rem;
+    line-height: 1.65;
   }
 }
 
-@media (max-width: 1024px) {
+/* Tablet landscape (769px to 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
   .advantages-section {
     padding: 80px 0;
   }
@@ -476,38 +496,61 @@ export default {
   
   .advantages-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
+    gap: 28px;
   }
   
   .section-header {
     margin-bottom: 60px;
   }
   
+  .section-title {
+    font-size: 3rem;
+  }
+  
+  .section-subtitle {
+    font-size: 1.125rem;
+  }
+  
   .card-inner {
-    padding: 32px 24px;
+    padding: 36px 28px;
   }
   
   .advantage-title {
-    font-size: 1.25rem;
+    font-size: 1.375rem;
   }
   
   .advantage-description {
     font-size: 0.9375rem;
   }
+  
+  .advantage-icon {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .icon-bg {
+    width: 100px;
+    height: 100px;
+  }
 }
 
-@media (max-width: 768px) {
+/* Tablet portrait (481px to 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
   .advantages-section {
     padding: 60px 0;
   }
   
+  .container {
+    padding: 0 32px;
+  }
+  
   .advantages-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 20px;
   }
   
-  .card-inner {
-    padding: 32px 24px;
+  .section-header {
+    margin-bottom: 50px;
   }
   
   .section-title {
@@ -515,17 +558,76 @@ export default {
   }
   
   .section-subtitle {
-    font-size: 1.125rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .container {
-    padding: 0 24px;
+    font-size: 1.0625rem;
   }
   
   .card-inner {
-    padding: 24px 20px;
+    padding: 28px 20px;
+  }
+  
+  .advantage-title {
+    font-size: 1.125rem;
+  }
+  
+  .advantage-description {
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+  
+  .advantage-icon {
+    width: 52px;
+    height: 52px;
+  }
+  
+  .icon-bg {
+    width: 90px;
+    height: 90px;
+  }
+  
+  .icon-wrapper {
+    margin-bottom: 24px;
+  }
+}
+
+/* Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+  .advantages-section {
+    padding: 50px 0;
+  }
+  
+  .container {
+    padding: 0 20px;
+  }
+  
+  .advantages-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .section-header {
+    margin-bottom: 40px;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+    margin-bottom: 16px;
+  }
+  
+  .section-subtitle {
+    font-size: 1rem;
+  }
+  
+  .card-inner {
+    padding: 28px 20px;
+  }
+  
+  .advantage-title {
+    font-size: 1.125rem;
+  }
+  
+  .advantage-description {
+    font-size: 0.875rem;
+    line-height: 1.5;
   }
   
   .advantage-icon {
@@ -538,13 +640,21 @@ export default {
     height: 80px;
   }
   
-  .section-title {
-    font-size: 2rem;
+  .icon-wrapper {
+    margin-bottom: 20px;
   }
   
-  .info-badge {
-    padding: 12px 24px;
-    font-size: 14px;
+  .decoration-circle {
+    width: 40px;
+    height: 40px;
+    top: -20px;
+    right: -20px;
+  }
+  
+  .decoration-line {
+    width: 30px;
+    top: 15px;
+    right: 15px;
   }
 }
 </style>
