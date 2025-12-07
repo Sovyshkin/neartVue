@@ -4,4 +4,5 @@ export default ({ env }) => ({
   app: {
     keys: env.array('APP_KEYS'),
   },
+  url: 'https://admin.xn--d1abeikndg7bt.art'
 });
