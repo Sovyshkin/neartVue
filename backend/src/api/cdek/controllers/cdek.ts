@@ -257,10 +257,8 @@ async function getAccessToken(): Promise<string> {
       client_secret: CDEK_PASSWORD,
     }).toString()
   });
-
   const data = await response.json() as any;
   console.log('CDEK token response:', data);
-  
   if (!data.access_token) {
     // Сбрасываем кэш при ошибке
     cachedToken = null;
