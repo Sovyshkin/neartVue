@@ -7,9 +7,9 @@ export default (config: UserConfig) => {
       alias: {
         "@": "/src",
       },
-      server: {
-        allowedHosts: true,
-      },
+    },
+    server: {
+      allowedHosts: true,
     },
   });
 };
